@@ -1890,9 +1890,20 @@
 #             data1.append([add_one, add_two, add_three])
 # for value in data1:
 #     print(value)
-data = ["1", "2", "3"]
-data1 = ["5"]
-if data1 not in data:
-    print("hahhaa")
-else:
-    print("hêhe")
+# data = 15.3
+# data1 = [10, 23, 44, 22, 55]
+
+
+# # Tạo một hàm tùy chỉnh để tính toán khoảng cách tuyệt đối giữa số và data
+# def absolute_difference(x):
+#     return abs(x - data)
+
+
+# closest_value = min(data1, key=absolute_difference)
+# print("Số gần nhất với giá trị data là:", closest_value)
+
+# Điều kiện bạn muốn kiểm tra
+data = 1
+data1 = [1, 2, 3, 4, 5]
+s1 = f"""{"quần đùi"if data in data1 else "quần què"} """
+print("check valeu data s1", s1)

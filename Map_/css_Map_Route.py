@@ -276,6 +276,14 @@ def css_DialogCompare():
             padding:5px;
             letter-spacing:1px;
         }
+        .title-main{
+            font-size:15px;
+            font-weight:bold;
+            color:red;
+            margin:5px;
+            padding:5px;
+            letter-spacing:1px;
+        }
     </style>
     """
     return styles

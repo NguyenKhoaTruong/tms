@@ -54,10 +54,9 @@ class DialogCompare(QDialog):
             print("Log Error", e)
 
     def cal_RandomTour(self, point, start_Point, mode_Start, mode_Return):
-        print("check value type point", type(point))
         try:
             if mode_Start == True and start_Point not in point:
-                point.insert(0, start_Point)  # Sai dòng này là np adarrray
+                point = point = np.insert(point, 0, start_Point)
             distance = distance_Matrix.calculate_distances(point)
             route, cost = Randomized_Tour_Cluster.randomized_tour(
                 distance, 0, mode_Return, not mode_Return
@@ -90,46 +89,61 @@ class DialogCompare(QDialog):
             print("Log Error", e)
 
     def add_HTML(self, point, start_Point, modeStart, modeReturn):
-        list_Total = ""
-        distance, time = self.cal_Real(point, start_Point, modeStart, modeReturn)
-        for index, value in enumerate(self.data_Title):
-            list_Total += f"""
-            <div class="route-main"> 
-                <div id="text-show" class="route">
-                    <div class="title-text">{value}</br></div>
-                        <div class="title-text">
-                            KM - Direction: {self.data_Matrix[index]} KM </br>
-                        </div>
-                        <div class="title-text">
-                            KM - Route: {distance} KM </br>
-                        </div>  
-                        <div class="title-text">
-                            Time - Route: {time} </br>
-                        </div>
-                </div>
-            </div> 
-            """
-        return list_Total
+        try:
+            list_Total = ""
+            distance, time = self.cal_Real(point, start_Point, modeStart, modeReturn)
+
+            def change_Background(x):
+                return abs(x - distance)
+
+            item_ChangeB = min(self.data_Matrix, key=change_Background)
+
+            for index, value in enumerate(self.data_Title):
+                list_Total += f"""
+                <div class="route-main"> 
+                    <div id="text-show" class="route">
+                        <div class="title-text">{value}</br></div>
+                            <div class={"title-main" if item_ChangeB == self.data_Matrix[index] else "title-text"}>
+                                KM - Direction: {self.data_Matrix[index]} KM </br>
+                            </div>
+                            <div class="title-text">
+                                KM - Route: {distance} KM </br>
+                            </div>  
+                            <div class="title-text">
+                                Time - Route: {time} </br>
+                            </div>
+                    </div>
+                </div> 
+                """
+
+            return list_Total
+        except ValueError as e:
+            print("Log Error", e)
 
     def cal_Real(self, point, start_Point, modeStart, modeReturn):
         try:
             if modeStart == True and start_Point not in point:
-                point.insert(0, start_Point)
+                point = np.insert(point, 0, start_Point)
             elif modeReturn == True and modeStart == True and start_Point not in point:
-                point.insert(0, start_Point)
-                point.append(start_Point)
+                point = np.insert(point, 0, start_Point)
+                point = np.append(point, start_Point)
+            print("check value data point", point, type(point))
             distance, time = show_Real_Data().data_Real(point)
             return distance, time
         except ValueError as e:
             print("Log Error", e)
 
     def show_HTML(self, data):
+        data_Point = []
         start_Point = data.cbStart.currentData()
         start_Point = [start_Point[1], start_Point[2]]
         modeStart = data.modeStartPoint.isChecked()
         modeReturn = data.modeReturn.isChecked()
         point = data.selected_cluster
-        self.cal_Algorithm(point, start_Point, modeStart, modeReturn)
+        for value in point:
+            data_Point.append(value)
+        content_HTML = self.add_HTML(data_Point, start_Point, modeStart, modeReturn)
+        self.cal_Algorithm(data_Point, start_Point, modeStart, modeReturn)
         html = f"""
             <!DOCTYPE html>
             <html>
@@ -138,12 +152,10 @@ class DialogCompare(QDialog):
             </head>
             <body>
                 <div class="container">
-                    {self.add_HTML(point, start_Point, modeStart, modeReturn)}
+                    {content_HTML}
                 <div>
             </body>
             </html>
             """
         self.web_view.setHtml(html)
         self.layout_.addWidget(self.web_view)
-        # giải phóng bộ nhớ khi tắt
-        self.deleteLater()
