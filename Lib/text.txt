@@ -1,0 +1,9 @@
+Tuần sau: 18->23/09/2023
+viết lại một số funtion cho dll;
+task tms
+
+15-9-2023:
+    return start check box.
+    create_ui_bar
+    hide time direction✅
+

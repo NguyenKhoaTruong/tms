@@ -1,0 +1,403 @@
+# from __future__ import generators
+# from sqlalchemy.ext.declarative import declarative_base
+# from sqlalchemy import create_engine
+# from sqlalchemy.orm import sessionmaker,relationship,Session
+# from typing import List
+# from operator import or_
+# from sqlalchemy.sql import select
+# from sqlalchemy import join
+# from sqlalchemy.orm import aliased
+# from sqlalchemy import update
+# from sqlalchemy.orm import Bundle
+# from sqlalchemy.sql import text
+# from sqlalchemy import desc
+# import re
+
+# SERVER = '192.168.70.131'
+# DATABASE = 'S1'
+# DRIVER = 'SQL Server'
+# USERNAME = 'WCFCom'
+# PASSWORD = 'Init0710'
+# DATABASE_CONNECTION = f'mssql://{USERNAME}:{PASSWORD}@{SERVER}/{DATABASE}?driver={DRIVER}'
+# engine = create_engine(DATABASE_CONNECTION)
+# connection = engine.connect()
+
+# def showDataContact():
+#     query=text("Select ContactName from MA_Contact")
+#     data=[]
+#     contactCode=connection.execute(query)
+#     for value in contactCode:
+#         data.append(value)
+#     return data
+
+# def showDataTableEquipment():
+#     query=text(
+#         """
+#         Select me.EquipmentDesc,me.EquipTypeNo,
+#         ms.StaffUserId,me.DefaultStaffId
+#         from MA_Staff ms , MA_Equipment me
+#         where ms.StaffUserId=me.DefaultStaffId
+#         """
+#     )
+#     data=[]
+#     dataEquipment=connection.execute(query)
+#     for value in dataEquipment:
+#         data.append(value)
+#     return data
+# def showDataEquipType():
+#     query=text('Select EquipTypeNo from MA_Equipment')
+#     dataEquipType=connection.execute(query).all()
+#     return dataEquipType
+# def showDataTripPickUpAndShipTo():
+#     query=text('Select CompanyName from MA_Companys')
+#     dataQuery=connection.execute(query).all()
+#     return dataQuery
+
+# # def showDataTripType():
+# #     query=text(
+# #         'Select CodeDesc from MA_StdCodes where CodeID=:CodeID '
+# #         )
+# #     dataQuery=connection.execute(query,CodeID=).all()
+# #     print('check dataa Query',dataQuery)
+# #     return dataQuery
+# # def showDataEquimentGroup():
+# #     equipmentGroup=modal.seccion.query(
+# #     modal.EquipmentType.EquipTypeNo).join(modal.
+# #     MaEquiment).filter(modal.EquipmentType.EquipTypeNo
+# #     ==modal.MaEquiment.EquipTypeNo).all()
+# #     return equipmentGroup
+# # def showDataEquipmentGroupTrip():
+# #     equipmentGroupTrip=modal.seccion.query(modal.EquipmentType.EquipTypeNo).all()
+# #     return equipmentGroupTrip
+# # def findEquipmentGroup():
+# #     #choose value and find data in table
+# #     print('kkk')
+# # def addTripSimpleDL(TripNo,ETP,ETA,
+# #                     CreateDate,CreateUser,
+# #                     IsUse,EquipmentCode,
+# #                     EquipmentDesc,DriverId,
+# #                     TripStatus,DCCode,
+# #                     EquipTypeNo,CODAmount):
+# #     addSimpleTrip=modal.SimpleTrip(TripNo=TripNo,ETP=ETP,
+# #                     ETA=ETA,CreateDate=CreateDate,CreateUser=CreateUser,
+# #                     IsUse=IsUse,EquipmentCode=EquipmentCode,EquipmentDesc=
+# #                     EquipmentDesc,DriverId=DriverId,TripStatus=TripStatus,
+# #                     DCCode=DCCode,EquipTypeNo=EquipTypeNo,CODAmount=CODAmount
+# #     )
+# #     modal.seccion.add(addSimpleTrip)
+# #     modal.seccion.commit()
+# # def addOrderSimple(OrderNo,Weight,Volume,
+# #                    ShipTo,ShipToAddress,DeliveryDate,
+# #                    Priority,CreateDate,TripNo,DCCode,
+# #                    ContactCode,CODAmount,CreateUser,
+# #                    IsUse,SplitOrderIndex,TripType,Qty,
+# #                    PickUp,COD,ItemNote):
+# #     try:
+# #         addSimpleOrderDetail=modal.SimpleOrder(OrderNo=OrderNo,
+# #                     Weight=Weight,Volume=Volume,ShipTo=ShipTo,
+# #                     ShipToAddress=ShipToAddress,DeliveryDate=
+# #                     DeliveryDate,Priority=Priority,CreateDate=
+# #                     CreateDate,TripNo=TripNo,DCCode=DCCode,
+# #                     ContactCode=ContactCode,CODAmount=CODAmount,
+# #                     CreateUser=CreateUser,IsUse=IsUse,SplitOrderIndex=
+# #                     SplitOrderIndex,TripType=TripType,Qty=Qty,PickUp=
+# #                     PickUp,COD=COD,ItemNote=ItemNote)
+# #         modal.seccion.add(addSimpleOrderDetail)
+# #         modal.seccion.commit()
+# #     except ValueError as error:
+# #         print('Log Error',error)
+# # def showDataTripSimple():
+# #     showDataProfile=modal.seccion.query(modal.SimpleTrip.TripNo,
+# #     modal.SimpleTrip.BatchGroupNo,modal.SimpleTrip.BatchGroupNo,
+# #     modal.SimpleTrip.EquipTypeNo,modal.SimpleTrip.ETP,modal.MaEquiment.Ownership,
+# #     modal.SimpleTrip.Porter,modal.SimpleTrip.DriverDesc,
+# #     modal.SimpleTrip.EquipmentCode,modal.SimpleTrip.EquipmentDesc,
+# #     modal.SimpleOrder.OrderNo,modal.SimpleOrder.Qty,
+# #     modal.SimpleOrder.Weight,modal.SimpleOrder.Volume,
+# #     modal.SimpleOrder.OrderId,modal.SimpleOrder.CreateDate,modal.SimpleOrder.CreateUser,modal.SimpleTrip.ETA,
+# #     modal.SimpleTrip.TripStatus).filter(
+# #     modal.SimpleOrder.TripNo==modal.SimpleTrip.TripNo,
+# #     modal.SimpleTrip.EquipmentCode==modal.MaEquiment.EquipmentCode,
+# #     ).filter(modal.SimpleTrip.TripNo=='S2306120002').all()
+# #     return showDataProfile
+# # def findDataTripOrder(dataSearch):
+# #     try:
+# #         findDataTripOrder=modal.seccion.query(modal.SimpleTrip.TripNo,
+# #         modal.SimpleTrip.BatchGroupNo,modal.SimpleTrip.BatchGroupNo,
+# #         modal.SimpleTrip.EquipTypeNo,modal.SimpleTrip.ETP,modal.MaEquiment.Ownership,
+# #         modal.SimpleTrip.Porter,modal.SimpleTrip.DriverDesc,
+# #         modal.SimpleTrip.EquipmentCode,modal.SimpleTrip.EquipmentDesc,
+# #         modal.SimpleOrder.OrderNo,modal.SimpleOrder.Qty,
+# #         modal.SimpleOrder.Weight,modal.SimpleOrder.Volume,
+# #         modal.SimpleOrder.OrderId,modal.SimpleOrder.CreateDate,
+# #         modal.SimpleOrder.CreateUser,modal.SimpleTrip.ETA,
+# #         modal.SimpleTrip.TripStatus,modal.SimpleTrip.TripMemo,
+# #         modal.SimpleTrip.LinkUpTripNo,modal.SimpleTrip.CreateDate,
+# #         modal.SimpleTrip.CreateUser).filter(
+# #         modal.SimpleOrder.TripNo==modal.SimpleTrip.TripNo,
+# #         modal.SimpleTrip.EquipmentCode==modal.MaEquiment.EquipmentCode,
+# #         ).filter(or_(modal.SimpleTrip.TripNo==dataSearch,modal.SimpleOrder.OrderNo==dataSearch)).all()
+# #         print('check data find page trip no',findDataTripOrder)
+# #         return findDataTripOrder
+# #     except ValueError as error:
+# #         print('Log Error',error)
+# # def showDataTripOrder():
+# #     try:
+# #         findDataTripOrder=modal.seccion.query(modal.SimpleTrip.TripNo,
+# #         modal.SimpleTrip.BatchGroupNo,modal.SimpleTrip.BatchGroupNo,
+# #         modal.SimpleTrip.EquipTypeNo,modal.SimpleTrip.ETP,modal.MaEquiment.Ownership,
+# #         modal.SimpleTrip.Porter,modal.SimpleTrip.DriverDesc,
+# #         modal.SimpleTrip.EquipmentCode,modal.SimpleTrip.EquipmentDesc,
+# #         modal.SimpleOrder.OrderNo,modal.SimpleOrder.Qty,
+# #         modal.SimpleOrder.Weight,modal.SimpleOrder.Volume,
+# #         modal.SimpleOrder.OrderId,modal.SimpleOrder.CreateDate,
+# #         modal.SimpleOrder.CreateUser,modal.SimpleTrip.ETA,
+# #         modal.SimpleTrip.TripStatus,modal.SimpleTrip.TripMemo,
+# #         modal.SimpleTrip.LinkUpTripNo,modal.SimpleTrip.CreateDate,
+# #         modal.SimpleTrip.CreateUser).filter(
+# #         modal.SimpleOrder.TripNo==modal.SimpleTrip.TripNo,
+# #         modal.SimpleTrip.EquipmentCode==modal.MaEquiment.EquipmentCode,
+# #         ).all()
+# #         print('check data find page trip no',findDataTripOrder)
+# #         return findDataTripOrder
+# #     except ValueError as error:
+# #         print('Log Error',error)
+# # def dataTableTripOrder():
+# #     try:
+# #         DataTripOrder=modal.seccion.query(modal.SimpleTrip.TripNo,
+# #         modal.SimpleTrip.BatchGroupNo,modal.SimpleTrip.BatchGroupNo,
+# #         modal.SimpleTrip.EquipTypeNo,modal.SimpleTrip.ETP,modal.MaEquiment.Ownership,
+# #         modal.SimpleTrip.Porter,modal.SimpleTrip.DriverDesc,
+# #         modal.SimpleTrip.EquipmentCode,modal.SimpleTrip.EquipmentDesc,
+# #         modal.SimpleOrder.OrderNo,modal.SimpleOrder.Qty,
+# #         modal.SimpleOrder.Weight,modal.SimpleOrder.Volume,
+# #         modal.SimpleOrder.OrderId,modal.SimpleOrder.CreateDate,
+# #         modal.SimpleOrder.CreateUser,modal.SimpleTrip.ETA,
+# #         modal.SimpleTrip.TripStatus).filter(
+# #         modal.SimpleOrder.TripNo==modal.SimpleTrip.TripNo,
+# #         modal.SimpleTrip.EquipmentCode==modal.MaEquiment.EquipmentCode,
+# #         ).filter(or_(modal.SimpleTrip.TripNo==modal.SimpleTrip.TripNo,
+# #         modal.SimpleOrder.OrderNo==modal.SimpleOrder.OrderNo)).all()
+# #         print('check data find page trip no',DataTripOrder)
+# #         return DataTripOrder
+# #     except ValueError as error:
+# #         print('Log Error',error)
+# # def dataTableTripEquiment():
+# #     try:
+# #         findDataTripEquement=modal.seccion.query(modal.SimpleTrip.TripNo,
+# #         modal.SimpleTrip.DriverDesc,modal.SimpleTrip.EquipmentCode,
+# #         modal.SimpleOrder.OrderNo,modal.SimpleTrip.TripMemo,modal.MaEquiment.EquipTypeNo
+# #         ).filter(
+# #         modal.SimpleOrder.TripNo==modal.SimpleTrip.TripNo,
+# #         modal.SimpleTrip.EquipmentCode==modal.MaEquiment.EquipmentCode,
+# #         ).all()
+# #         return findDataTripEquement
+# #     except ValueError as error:
+# #         print('Log Error',error)
+# # def dataExpressOrder():
+# #     try:
+# #         dataExpressOrder=modal.seccion.query(modal.SimpleOrder.OrderNo,
+# #         modal.SimpleOrder.DeliveryDate,modal.SimpleOrder.TripNo,
+# #         modal.SimpleOrder.ShipTo,modal.MAStaff.StaffName,modal.SimpleOrder.Weight,modal.SimpleOrder.Volume
+# #         ,modal.SimpleOrder.Qty,modal.SimpleOrder.ArrivalTime,modal.SimpleOrder.ItemNote,
+# #         modal.SimpleOrder.PickUp,modal.SimpleOrder.OtherRefNo3,modal.SimpleOrder.TripType,
+# #         modal.SimpleOrder.ShipToAddress,modal.SimpleOrder.OtherRefNo2,modal.SimpleOrder.OtherRefNo1,
+# #         modal.MAStaff.Remark,modal.MAStaff.Remark,modal.MAStaff.Remark,
+# #         modal.SimpleTrip.EquipmentCode,modal.SimpleTrip.EquipmentCode,modal.MAStaff.StaffName
+# #         ,modal.MAStaff.MobileNo,modal.MaEquiment.Ownership,modal.SimpleOrder.CODAmount,
+# #         modal.MACompanys.WavePriority,modal.SimpleOrder.RequestGroup,modal.SimpleOrder.RequestTruckType,
+# #         modal.SimpleOrder.CreateDate,modal.SimpleOrder.CreateUser,
+# #         modal.SimpleTrip.TripStatus,modal.SimpleTrip.TripStatus,modal.MAStaff.Remark,modal.MAStaff.Remark,
+# #         modal.SimpleTrip.Vendor,modal.SimpleTrip.EquipmentDesc,
+# #         modal.SimpleTrip.DriverDesc,modal.MACompanys.Addr1,modal.MACompanys.Province).filter(
+# #         modal.SimpleTrip.TripNo==modal.SimpleOrder.TripNo
+# #         ,modal.MAStaff.StaffUserId==modal.MaEquiment.DefaultStaffId,
+# #         modal.MaEquiment.EquipmentCode==modal.SimpleTrip.EquipmentCode
+# #         # ,modal.MACompanys.ContactCode==modal.SimpleOrder.ContactCode
+# #         ).all()
+# #         return dataExpressOrder
+# #     except ValueError as error:
+# #         print('Log Error',error)
+# # def showDataEquipment():
+# #     try:
+# #         dataEquipment = modal.seccion.query(modal.MaEquiment.EquipmentCode,modal.MaEquiment.DefaultStaffId).all()
+# #         print('check data',dataEquipment)
+# #         return dataEquipment
+# #     except ValueError as error:
+# #         print('Log Error',error)
+# # def dataExpressOrderDetail():
+# #     try:
+# #         dataExpressOrderDetail=modal.seccion.query(modal.SimpleOrder.OrderNo,
+# #         modal.SimpleOrder.PickUp,modal.SimpleOrder.ShipToArea,
+# #         modal.SimpleOrder.TripType,modal.SimpleOrder.Weight
+# #         ,modal.SimpleOrder.Volume,modal.SimpleOrder.ItemNote,modal.SimpleOrder.Qty,
+# #         modal.SimpleOrder.CODAmount,modal.SimpleTrip.CompleteTime,
+# #         modal.SimpleOrder.RequestGroup,modal.SimpleOrder.RequestTruckType,modal.MACompanys.WavePriority).filter(
+# #         modal.SimpleTrip.TripNo==modal.SimpleOrder.TripNo)
+# #         print('chech data',dataExpressOrderDetail)
+# #         return dataExpressOrderDetail
+# #     except ValueError as error:
+# #         print('Log Error',error)
+# # def addAutoCheckGenerated(
+# #         OrderNo,ShipTo,Weight,Volume,Qty,ShipToArea,ShipToAddress,
+# #         ItemNote,PickUp,TripType,RequestGroup,RequestTruckType,OtherRefNo1,
+# #         COD,CODAmount,CreateDate,CreateUser,UpdateDate,UpdateUser,IsUse,
+# #         SplitOrderIndex,ContactCode,DeliveryDate,Priority,TripNo,ETP,ETA,
+# #         EquipmentCode,EquipmentDesc,DriverId,TripStatus,EquipTypeNo,
+# #         DriverDesc,Vendor,DCCode
+# #         ):
+# #     try:
+# #         addGeneratedOrderTrip=modal.SimpleOrder(
+# #         OrderNo=OrderNo,ShipTo=ShipTo,Weight=Weight,Volume=Volume,
+# #         Qty=Qty,ShipToArea=ShipToArea,ShipToAddress=ShipToAddress,
+# #         ItemNote=ItemNote,PickUp=PickUp,TripType=TripType,
+# #         RequestGroup=RequestGroup,RequestTruckType=RequestTruckType,
+# #         OtherRefNo1=OtherRefNo1,COD=COD,CODAmount=CODAmount,CreateDate=CreateDate
+# #         ,CreateUser=CreateUser,UpdateDate=UpdateDate,UpdateUser=UpdateUser,IsUse=IsUse,
+# #         SplitOrderIndex=SplitOrderIndex,ContactCode=ContactCode,
+# #         DeliveryDate=DeliveryDate,Priority=Priority,TripNo=TripNo
+# #         )
+# #         addGeneratedSimpleTrip=modal.SimpleTrip(
+# #         TripNo=TripNo,ETP=ETP,ETA=ETA,CreateDate=CreateDate,
+# #         CreateUser=CreateUser,UpdateDate=UpdateDate,UpdateUser=UpdateUser,
+# #         IsUse=IsUse,EquipmentCode=EquipmentCode,EquipmentDesc=EquipmentDesc,
+# #         DriverId=DriverId,DriverDesc=DriverDesc,TripStatus=TripStatus,Vendor=Vendor,
+# #         DCCode=DCCode,EquipTypeNo=EquipTypeNo,CODAmount=CODAmount)
+# #         modal.seccion.add(addGeneratedOrderTrip)
+# #         modal.seccion.add(addGeneratedSimpleTrip)
+# #         modal.seccion.commit()
+# #     except ValueError as error:
+# #         print('Log Error',error)
+# # def searchTripSimple(dataSearch,dataTimeLeft,dataTimeRight):
+# #     try:
+# #         findDataTripETP=modal.seccion.query(modal.SimpleTrip.TripNo,
+# #         modal.SimpleTrip.BatchGroupNo,modal.SimpleTrip.BatchGroupNo,
+# #         modal.SimpleTrip.EquipTypeNo,modal.SimpleTrip.ETP,modal.MaEquiment.Ownership,
+# #         modal.SimpleTrip.Porter,modal.SimpleTrip.DriverDesc,
+# #         modal.SimpleTrip.EquipmentCode,modal.SimpleTrip.EquipmentDesc,
+# #         modal.SimpleOrder.OrderNo,modal.SimpleOrder.Qty,
+# #         modal.SimpleOrder.Weight,modal.SimpleOrder.Volume,modal.SimpleTrip.TripMemo,
+# #         modal.SimpleOrder.CreateDate,modal.SimpleOrder.CreateDate,modal.SimpleOrder.CreateUser,
+# #         modal.SimpleTrip.TripStatus,modal.SimpleTrip.TripMemo,modal.SimpleTrip.SecurityCode,
+# #         modal.SimpleTrip.CreateDate,modal.SimpleTrip.CreateUser).filter(
+# #         modal.SimpleTrip.TripNo==modal.SimpleOrder.TripNo,
+# #         modal.SimpleTrip.EquipmentCode==modal.MaEquiment.EquipmentCode,
+# #         modal.MAContact.ContactName==dataSearch,
+# #         modal.SimpleTrip.ETP>=dataTimeLeft,
+# #         modal.SimpleTrip.ETP<=dataTimeRight
+# #         ).all()
+# #         print('check data find page trip no',findDataTripETP)
+# #         return findDataTripETP
+# #     except ValueError as error:
+# #         print('Log Error',error)
+# # def searchDataOrder(nameContact,timeLeft,timeRight,status,textNote,otherNo):
+# #     try:
+# #         dataOther=modal.seccion.query(modal.SimpleOrder.OrderNo,
+# #         modal.SimpleOrder.DeliveryDate,modal.SimpleOrder.TripNo,
+# #         modal.SimpleOrder.ShipTo,modal.MAStaff.StaffName,modal.SimpleOrder.Weight,modal.SimpleOrder.Volume
+# #         ,modal.SimpleOrder.Qty,modal.SimpleOrder.ArrivalTime,modal.SimpleOrder.ItemNote,
+# #         modal.SimpleOrder.PickUp,modal.SimpleOrder.OtherRefNo3,modal.SimpleOrder.TripType,
+# #         modal.SimpleOrder.ShipToAddress,modal.SimpleOrder.OtherRefNo2,modal.SimpleOrder.OtherRefNo1,
+# #         modal.MAStaff.Remark,modal.MAStaff.Remark,modal.MAStaff.Remark,
+# #         modal.SimpleTrip.EquipmentCode,modal.SimpleTrip.EquipmentCode,modal.MAStaff.StaffName
+# #         ,modal.MAStaff.MobileNo,modal.MaEquiment.Ownership,modal.SimpleOrder.CODAmount,
+# #         modal.MACompanys.WavePriority,modal.SimpleOrder.RequestGroup,modal.SimpleOrder.RequestTruckType,
+# #         modal.SimpleOrder.CreateDate,modal.SimpleOrder.CreateUser,
+# #         modal.SimpleTrip.TripStatus,modal.SimpleTrip.TripStatus,modal.MAStaff.Remark,modal.MAStaff.Remark,
+# #         modal.SimpleTrip.Vendor,modal.SimpleTrip.EquipmentDesc,
+# #         modal.SimpleTrip.DriverDesc,modal.MACompanys.Addr1,modal.MACompanys.Province).filter(
+# #         modal.SimpleTrip.TripNo==modal.SimpleOrder.TripNo
+# #         ,modal.MAStaff.StaffUserId==modal.MaEquiment.DefaultStaffId,
+# #         modal.MaEquiment.EquipmentCode==modal.SimpleTrip.EquipmentCode,
+# #         modal.MAContact.ContactName==nameContact,
+# #         modal.SimpleOrder.DeliveryDate>=timeLeft,
+# #         modal.SimpleOrder.DeliveryDate<=timeRight,
+# #         modal.SimpleTrip.TripStatus==status
+# #         ).filter(or_(modal.SimpleOrder.ItemNote==textNote,modal.SimpleOrder.OrderNo==otherNo)).all()
+# #         return dataOther
+# #     except ValueError as error:
+# #         print('Log Error',error)
+# # def saveDataFromFile(OrderNo,PickUp,ShipTo,ShipToAddress,TripType,Weight,Volume,
+# #     ItemNote,Qty,Priority,CODAmount,CompleteTime,RequestGroup,RequestTruckType,
+# #     OtherRefNo1,EquipmentCode,DriverId,ETP,ETA,ATP,ETD,ATD,TripNo,COD,ActualAmount):
+# #     saveDataToOder=modal.SimpleOrder(OrderNo=OrderNo,PickUp=PickUp,ShipTo=ShipTo,
+# #     ShipToAddress=ShipToAddress,TripType=TripType,Weight=Weight,Volume=Volume,ItemNote=ItemNote,
+# #     Qty=Qty,Priority=Priority,CODAmount=CODAmount,RequestGroup=RequestGroup,
+# #     RequestTruckType=RequestTruckType,OtherRefNo1=OtherRefNo1,TripNo=TripNo,COD=COD,ActualAmount=ActualAmount)
+# #     saveDataSimple=modal.SimpleTrip(TripNo=TripNo,EquipmentCode=EquipmentCode,DriverId=DriverId,ETP=ETP,
+# #     ETA=ETA,ATP=ATP,ETD=ETD,ATD=ATD,CompleteTime=CompleteTime)
+# #     modal.seccion.add(saveDataToOder)
+# #     modal.seccion.add(saveDataSimple)
+# #     modal.seccion.commit()
+# # def showInfoOrderNo(dataSearch):
+# #     try:
+# #         dataOther=modal.seccion.query(modal.SimpleOrder.OrderNo,
+# #         modal.SimpleOrder.DeliveryDate,modal.SimpleOrder.TripNo,
+# #         modal.SimpleOrder.ShipTo,modal.MAStaff.StaffName,modal.SimpleOrder.Weight,modal.SimpleOrder.Volume
+# #         ,modal.SimpleOrder.Qty,modal.SimpleOrder.ArrivalTime,modal.SimpleOrder.ItemNote,
+# #         modal.SimpleOrder.PickUp,modal.SimpleOrder.OtherRefNo3,modal.SimpleOrder.TripType,
+# #         modal.SimpleOrder.ShipToAddress,modal.SimpleOrder.OtherRefNo2,modal.SimpleOrder.OtherRefNo1,
+# #         modal.MAStaff.Remark,modal.MAStaff.Remark,modal.MAStaff.Remark,
+# #         modal.SimpleTrip.EquipmentCode,modal.SimpleTrip.EquipmentCode,modal.MAStaff.StaffName
+# #         ,modal.MAStaff.MobileNo,modal.MaEquiment.Ownership,modal.SimpleOrder.CODAmount,
+# #         modal.MACompanys.WavePriority,modal.SimpleOrder.RequestGroup,modal.SimpleOrder.RequestTruckType,
+# #         modal.SimpleOrder.CreateDate,modal.SimpleOrder.CreateUser,
+# #         modal.SimpleTrip.TripStatus,modal.SimpleTrip.TripStatus,modal.MAStaff.Remark,modal.MAStaff.Remark,
+# #         modal.SimpleTrip.Vendor,modal.SimpleTrip.EquipmentDesc,
+# #         modal.SimpleTrip.DriverDesc,modal.MACompanys.Addr1,modal.MACompanys.Province).filter(
+# #         modal.SimpleTrip.TripNo==modal.SimpleOrder.TripNo
+# #         ,modal.MAStaff.StaffUserId==modal.MaEquiment.DefaultStaffId,
+# #         modal.MaEquiment.EquipmentCode==modal.SimpleTrip.EquipmentCode,
+# #         modal.SimpleOrder.OrderNo==dataSearch
+# #         ).all()
+# #         return dataOther
+# #     except ValueError as error:
+# #         print('Log Error',error)
+# # def searchStatusOrder(contactCode,status):
+# #     try:
+# #         dataOther=modal.seccion.query(modal.SimpleOrder.OrderNo,
+# #         modal.SimpleOrder.DeliveryDate,modal.SimpleOrder.TripNo,
+# #         modal.SimpleOrder.ShipTo,modal.MAStaff.StaffName,modal.SimpleOrder.Weight,modal.SimpleOrder.Volume
+# #         ,modal.SimpleOrder.Qty,modal.SimpleOrder.ArrivalTime,modal.SimpleOrder.ItemNote,
+# #         modal.SimpleOrder.PickUp,modal.SimpleOrder.OtherRefNo3,modal.SimpleOrder.TripType,
+# #         modal.SimpleOrder.ShipToAddress,modal.SimpleOrder.OtherRefNo2,modal.SimpleOrder.OtherRefNo1,
+# #         modal.MAStaff.Remark,modal.MAStaff.Remark,modal.MAStaff.Remark,
+# #         modal.SimpleTrip.EquipmentCode,modal.SimpleTrip.EquipmentCode,modal.MAStaff.StaffName
+# #         ,modal.MAStaff.MobileNo,modal.MaEquiment.Ownership,modal.SimpleOrder.CODAmount,
+# #         modal.MACompanys.WavePriority,modal.SimpleOrder.RequestGroup,modal.SimpleOrder.RequestTruckType,
+# #         modal.SimpleOrder.CreateDate,modal.SimpleOrder.CreateUser,
+# #         modal.SimpleTrip.TripStatus,modal.SimpleTrip.TripStatus,modal.MAStaff.Remark,modal.MAStaff.Remark,
+# #         modal.SimpleTrip.Vendor,modal.SimpleTrip.EquipmentDesc,
+# #         modal.SimpleTrip.DriverDesc,modal.MACompanys.Addr1,modal.MACompanys.Province).where(
+# #         modal.SimpleOrder.TripNo==modal.SimpleTrip.TripNo,
+# #         modal.SimpleOrder.ContactCode==modal.MAContact.ContactCode,
+# #         modal.SimpleOrder.ContactCode==contactCode,
+# #         modal.SimpleTrip.TripStatus==status,
+# #         ).distinct().all()
+# #         print('check value modal',dataOther)
+# #         return dataOther
+# #     except ValueError as error:
+# #         print('Log Error',error)
+# # def checkOrder(orderNo):
+# #     findOrder=modal.seccion.query(modal.SimpleOrder.OrderNo).filter(modal.SimpleOrder.OrderNo==orderNo).scalar()
+# #     print('show data employee',findOrder)
+# #     return findOrder
+# # def checkTrip(tripNo):
+# #     findTrip=modal.seccion.query(modal.SimpleTrip.TripNo).filter(modal.SimpleTrip.TripNo==tripNo).scalar()
+# #     print('show data employee',findTrip)
+# #     return findTrip
+# # def showDataImportFile():
+# #     try:
+# #         dataImport=modal.seccion.query(modal.SimpleOrder.OrderNo,modal.SimpleOrder.ShipTo,
+# #         modal.SimpleOrder.ShipToAddress,modal.SimpleOrder.TripType,modal.SimpleOrder.Weight,
+# #         modal.SimpleOrder.Volume,modal.SimpleOrder.ItemNote,modal.SimpleOrder.Qty,
+# #         modal.SimpleOrder.CODAmount,modal.SimpleOrder.Priority,
+# #         modal.SimpleTrip.CompleteTime,modal.SimpleOrder.RequestGroup,
+# #         modal.SimpleOrder.RequestTruckType,modal.SimpleOrder.OtherRefNo1,
+# #         modal.SimpleTrip.DriverId,modal.SimpleTrip.ETP,modal.SimpleTrip.ETA,
+# #         modal.SimpleTrip.ATP,modal.SimpleTrip.ATD,modal.SimpleTrip.ATP).filter(
+# #         modal.SimpleTrip.TripNo==modal.SimpleOrder.TripNo
+# #         ).order_by(desc(modal.SimpleOrder.OrderId)).limit(40).all()
+# #         return dataImport
+# #     except ValueError as error:
+# #         print('Log Error',error)

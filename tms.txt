@@ -1,0 +1,118 @@
+cách tách khi vẽ route diracetion google map aip key:
+https://stackoverflow.com/questions/8779886/exceed-23-waypoint-per-request-limit-on-google-directions-api-business-work-lev/43458012#43458012
+
+# các thuật toán tsp với số lượng lớn dữ liệu:
+https://www.linkedin.com/pulse/travelling-salesman-problem-dsa-sayandip-chatterjee
+
+07/10/2023
+Fix:
+    Hiển thị direction trên google map.-11:13
+    Hiển thị time và km trong kết quả.
+    
+Kiểm tra thuật toán nào đang chạy ổn:
+Result: So Sánh kết quả thuật toán( Cách tính khoảng cách khác nhau.)
+-Randome Tour:
+    Default:12929 KM
+    Start Point: 
+        No: 12355 KM,
+        Yes : 11089 KM
+    Return Start: 
+        No: 13108 KM,
+        Yes: 13798 KM
+    Start Point And Return Start: 13970 KM
+
+-tabu Search:
+    Default:2937. KM
+    Start Point: 
+        No: 2937. KM,
+        Yes : 2970. KM
+    Return Start: 
+        No: 2937 KM,
+        Yes: 2937. KM
+
+    Start Point And Return Start: 2970. KM
+-Ant_ColonyOptimization:
+    Default:12752 KM
+    Start Point: 
+        No: 12752  KM,
+        Yes : 12974  KM
+    Return Start: 
+        No: 12752 KM,
+        Yes: 12767  KM
+    Start Point And Return Start: 12994  KM
+-Christofides_Algorithm:
+    Default:8649 KM
+    Start Point: 
+        No: 8649 KM,
+        Yes : 9762 KM
+    Return Start: 
+        No: 8649 KM,
+        Yes: 9726 KM
+    Start Point And Return Start: 9774 KM
+-Hill Climbing:
+    Default:4050 KM
+    Start Point: 
+        No: 4203 KM,
+        Yes : 4118 KM
+    Return Start: 
+        No: 3609 KM,
+        Yes: 4235 KM
+    Start Point And Return Start: 3865 KM
+---- Tạch-------
+-2 OPT(return Start tạch:Change location là chạy được):Lỗi giao diện
+    Default:1728 KM
+    Start Point: 
+        No: 4203 KM,
+        Yes : 1711 KM
+    Return Start: 
+        No: 1728 KM,
+        Yes: 2810 KM
+    Start Point And Return Start: 3865 KM
+- Nearest Neighbor:(return start tạch:change location là chạy được) : Lỗi giao diện
+    Default:1873 KM
+    Start Point: 
+        No: 1873 KM,
+        Yes : 1817 KM
+    Return Start: 
+        No: 1873 KM,
+        Yes: 3014 KM
+    Start Point And Return Start: 2970 KM
+- Branh and Bound: lâu quá nên cho tạch
+-Brute Force : tràn ram tạch nặng
+
+
+
+- học cách tranning : chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://webthesis.biblio.polito.it/24597/1/tesi.pdf
+
+drone kit 
+https://dev.to/korigod/open-source-framework-to-start-programming-drones-within-an-hour-4b0l
+# linux + window
+https://github.com/dbaldwin/Tello-Python
+emulator:
+PX4
+
+tìm hiểu cách viết build bath, powershell lên git respo
+trick
+ml
+
+tranning sử dụng qlearning
+https://ekimetrics.github.io/blog/2021/11/03/tsp/
+
+
+2/10/2023: -> 4/10/2023
+Kmean dùng trong Consider capacity: qty, volume, weight : chưa
+
+viết:
+    requirement.txt
+    fiel set up
+
+
+
+17/10/2023
+
+Lỗi giao diện: Không check all check box
+                Dưới 6 order không tự mở layout: đang fix
+
+Số lượng start poitn không đúng khi mỗi lần nhấn lại kết quả lưu trùng
+So sánh cái nào gần nhất thì hiển thị màu khác...
+

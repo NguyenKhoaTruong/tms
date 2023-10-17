@@ -1,0 +1,2 @@
+https://ekimetrics.github.io/blog/2021/11/03/tsp/
+https://github.com/PARSA-MHMDI/AI-simulated-annealing-algorithm-TSP
