@@ -276,13 +276,15 @@ def css_DialogCompare():
             padding:5px;
             letter-spacing:1px;
         }
-        .title-main{
-            font-size:15px;
-            font-weight:bold;
-            color:red;
+        .route-min{
+            height: 140px;
+            width: 255px;
+            font-family: math;
+            text-align: center;
+            background-color:red;
+            border-radius:5px;
             margin:5px;
             padding:5px;
-            letter-spacing:1px;
         }
     </style>
     """

@@ -114,5 +114,6 @@ Lỗi giao diện: Không check all check box
                 Dưới 6 order không tự mở layout: đang fix
 
 Số lượng start poitn không đúng khi mỗi lần nhấn lại kết quả lưu trùng
-So sánh cái nào gần nhất thì hiển thị màu khác...
+chỉnh sửa lại cb cluster
+So sánh cái nào gần nhất thì hiển thị màu khác... ✅
 

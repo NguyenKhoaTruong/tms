@@ -224,13 +224,11 @@ class ui_Cluster(QWidget):
             self.set_UICluster()
             self.show_Data_Cluster()
         else:
+            self.showMaximized()
             self.set_UINoCluster()
             self.get_Off_Return()
             self.add_UINoCluster()
-            self.show_DataNoCluster()
-
-    def show_DataNoCluster(self):
-        ShowMapCluster(self.array_Point, self.layout_UB)
+            ShowMapCluster(self.array_Point, self.layout_UB)
 
     def set_UICluster(self):
         self.btnOffMode.hide()

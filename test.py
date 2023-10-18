@@ -1907,3 +1907,13 @@ data = 1
 data1 = [1, 2, 3, 4, 5]
 s1 = f"""{"quần đùi"if data in data1 else "quần què"} """
 print("check valeu data s1", s1)
+
+daata = "84.25 km"
+print("check value data", daata[:-2])
+
+# btn_Compare.clicked.connect(fun_Compare)
+
+# def fun_Compare():
+#     print("check value data cluster", selected_cluster)
+#     input_dialog = DialogCompare(self)
+#     input_dialog.exec_()
