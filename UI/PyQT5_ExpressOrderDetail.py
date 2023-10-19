@@ -382,7 +382,7 @@ class AppDemo(QWidget):
         self.setWindowTitle("Express Order Detail")
         self.set_Style()
         self.showMaximized()
-        icon = QIcon("Assets\Img\logo.ico")  # Thay đổi đường dẫn tới biểu tượng của bạn
+        icon = QIcon("logo.ico")  # Thay đổi đường dẫn tới biểu tượng của bạn
         self.setWindowIcon(icon)
 
     def set_Style(self):
@@ -455,11 +455,13 @@ class AppDemo(QWidget):
                 mb.showwarning(title="Notification!!!", message="At least five data")
             elif len(selected_data) >= 5 and len(selected_data) < 10:
                 ClusterData(selected_data, self, 0)
+                self.showMinimized()
             else:
                 input_dialog = InputDialog(self)
                 if input_dialog.exec_() == QDialog.Accepted:
                     num_Cluster = input_dialog.input_Cluster.text()
                     ClusterData(selected_data, self, int(num_Cluster))
+                    self.showMinimized()
         except ValueError as e:
             print("Log Error", e)
 

@@ -219,7 +219,7 @@ class ui_Cluster(QWidget):
         self.setLayout(self.layOut_UI)
         self.show_Input_Data_TSP()
         self.role_Menu()
-        icon = QIcon("Assets\Img\logo.ico")  # Thay đổi đường dẫn tới biểu tượng của bạn
+        icon = QIcon("logo.ico")  # Thay đổi đường dẫn tới biểu tượng của bạn
         self.setWindowIcon(icon)
 
     def role_Menu(self):
