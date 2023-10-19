@@ -11,6 +11,7 @@ from PyQt5.QtWebEngineWidgets import QWebEngineView
 from Algorithm.Cluster.Tabu_Search import Tabu
 from Process_Data.PyQT5_Data import data_Proc
 import Map_.css_Map_Route as css
+from PyQt5.QtGui import QIcon
 import numpy as np
 
 
@@ -28,6 +29,8 @@ class DialogCompare(QDialog):
         self.setLayout(self.layout_)
         self.resize(600, 450)
         self.show_HTML(data)
+        icon = QIcon("Assets\Img\logo.ico")
+        self.setWindowIcon(icon)
 
     def cal_Algorithm(self, point, start_Point, mode_Start, mode_Return):
         try:

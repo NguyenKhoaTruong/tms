@@ -102,23 +102,12 @@ https://ekimetrics.github.io/blog/2021/11/03/tsp/
 2/10/2023: -> 4/10/2023
 Kmean dùng trong Consider capacity: qty, volume, weight : chưa
 
-viết:
-    requirement.txt
-    fiel set up 
-
-
 
 17/10/2023
 Lỗi giao diện: Không check all check box
                 Dưới 6 order không tự mở layout: đang fix
 
-
-18/10/2023
-viết:
-    requirement.txt
-    fiel set up + sử dụng innosetup
-
-    
+  
 check tại sao km distanc rouet lại khác nhau.
 đối với nhưng trip ngắn thì lại out
 
@@ -127,5 +116,3 @@ erorr build file:
     phiên bản của python.
     phiên bản của pyinstaller
 
-19/10/2023
-viết file setup , file requesment

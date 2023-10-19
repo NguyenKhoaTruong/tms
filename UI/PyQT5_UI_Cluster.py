@@ -27,6 +27,7 @@ from Map_.PyQT5_Map import ShowMapCluster
 from sklearn.cluster import KMeans
 from PyQt5.QtWidgets import QWidget
 from tkinter import messagebox as mb
+from PyQt5.QtGui import QIcon
 from dotenv import load_dotenv
 from datetime import datetime
 from PyQt5.QtCore import Qt
@@ -218,6 +219,8 @@ class ui_Cluster(QWidget):
         self.setLayout(self.layOut_UI)
         self.show_Input_Data_TSP()
         self.role_Menu()
+        icon = QIcon("Assets\Img\logo.ico")  # Thay đổi đường dẫn tới biểu tượng của bạn
+        self.setWindowIcon(icon)
 
     def role_Menu(self):
         if len(self.data_Cluster) > 10:

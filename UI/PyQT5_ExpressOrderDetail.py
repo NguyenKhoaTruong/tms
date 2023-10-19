@@ -23,15 +23,19 @@ from DB.Migration import get_Data_DB
 from Process_Data.PyQT5_ClusterData import ClusterData
 from PyQt5 import QtCore, QtWidgets
 from tkinter import messagebox as mb
-from PyQt5.QtGui import QColor
+from PyQt5.QtGui import QColor, QIcon
 from PyQt5.QtCore import Qt, QFile, QTextStream
-import datetime
+from UI.PyQT5_Dialog_Cluster import InputDialog
 from datetime import date
-import random
 import pandas as pd
+import ctypes
+import datetime
+import random
 import os
 import xlsxwriter
-from UI.PyQT5_Dialog_Cluster import InputDialog
+
+app = "MP.TMS_PLAN.TMS.1.0"
+ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(app)
 
 
 class datePickerCompleteDate(QtWidgets.QMainWindow):
@@ -378,6 +382,8 @@ class AppDemo(QWidget):
         self.setWindowTitle("Express Order Detail")
         self.set_Style()
         self.showMaximized()
+        icon = QIcon("Assets\Img\logo.ico")  # Thay đổi đường dẫn tới biểu tượng của bạn
+        self.setWindowIcon(icon)
 
     def set_Style(self):
         self.btnBack.setFixedHeight(30)
