@@ -105,14 +105,16 @@ Kmean dùng trong Consider capacity: qty, volume, weight : chưa
 
 17/10/2023
 Lỗi giao diện: Không check all check box
-                Dưới 6 order không tự mở layout: đang fix
 
-  
 check tại sao km distanc rouet lại khác nhau.
 đối với nhưng trip ngắn thì lại out
 
 doc build : https://www.pythonguis.com/tutorials/packaging-pyqt5-pyside2-applications-windows-pyinstaller/
 erorr build file:
-    phiên bản của python.
-    phiên bản của pyinstaller
+    phiên bản của python.✅
+    phiên bản của pyinstaller'✅
+    Tìm cách biuld file tối giản
+viết readme và lisant
 
+
+drone example : https://github.com/wangyeee/MiniGCS

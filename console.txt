@@ -1,3 +1,8 @@
 Create file requestment:
-
 https://www.geeksforgeeks.org/how-to-create-requirements-txt-file-in-python/
+
+Xen tất cả thư viện hiện đang sử dụng:
+pip freeze
+
+Lệnh build file:
+pyinstaller.exe --onefile --windowed --name tms --icon=E:\PythonGUI-ManageEmployee\Pyqt5\logo.ico  main.py
