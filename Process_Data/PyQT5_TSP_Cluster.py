@@ -14,7 +14,6 @@ from Algorithm.Cluster.Christofides_Algorithm import Christofides
 from Map_.PyQT5_Map_Route_Cluster import Show_Map_TSP_Cluster
 from Process_Data.PyQT5_Route_Time import Route_Time_Min
 from Caculator.PyQT5_distanceMatrix import distance_Matrix
-from Process_Data.PyQT5_data_PR import data_Parameter
 import numpy as np
 import json
 
@@ -484,7 +483,6 @@ class use_TSP_Cluster:
             start_Point = points[0]
         distances = distance_Matrix.calculate_distances(points)
 
-        data_Parameter().save_Data_JSON(points, distances, start_Point)
         if dataMainWindow.cbTSP.currentText() == "Branch And Bound":
             self.branch_Bound_TSP(
                 points,

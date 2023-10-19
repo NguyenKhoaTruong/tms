@@ -1,0 +1,3 @@
+Create file requestment:
+
+https://www.geeksforgeeks.org/how-to-create-requirements-txt-file-in-python/

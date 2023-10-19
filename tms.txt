@@ -127,3 +127,5 @@ erorr build file:
     phiên bản của python.
     phiên bản của pyinstaller
 
+19/10/2023
+viết file setup , file requesment
