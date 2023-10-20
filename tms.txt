@@ -106,8 +106,10 @@ Kmean dùng trong Consider capacity: qty, volume, weight : chưa
 17/10/2023
 Lỗi giao diện: Không check all check box
 
-check tại sao km distanc rouet lại khác nhau.
-đối với nhưng trip ngắn thì lại out
+check tại sao km distanc rouet lại khác nhau.:  do way point có cấu trúc gần đúng
+
+
+đối với nhưng trip ngắn thì lại out: lúc có lúc không
 
 doc build : https://www.pythonguis.com/tutorials/packaging-pyqt5-pyside2-applications-windows-pyinstaller/
 erorr build file:

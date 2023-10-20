@@ -34,12 +34,6 @@ class DialogCompare(QDialog):
 
     def cal_Algorithm(self, point, start_Point, mode_Start, mode_Return):
         try:
-            data = [
-                point,
-                start_Point,
-                mode_Start,
-                mode_Return,
-            ]  # cấu hình code gọn hơn
             random_Tour = self.cal_RandomTour(
                 point, start_Point, mode_Start, mode_Return
             )
@@ -91,6 +85,12 @@ class DialogCompare(QDialog):
         except ValueError as e:
             print("Log Error", e)
 
+    def convent_Point(self, data):
+        data_ = []
+        for value in data:
+            data_.append({"lat": value[0], "lng": value[1]})
+        return data_
+
     def cal_Real(self, point, start_Point, modeStart, modeReturn):
         try:
             if modeStart == True and start_Point not in point:
@@ -98,7 +98,7 @@ class DialogCompare(QDialog):
             elif modeReturn == True and modeStart == True and start_Point not in point:
                 point.insert(0, start_Point)
                 point.append(start_Point)
-            distance, time = show_Real_Data().data_Real(point)
+            distance, time = show_Real_Data().data_Real(self.convent_Point(point))
             return distance, time
         except ValueError as e:
             print("Log Error", e)
@@ -110,10 +110,19 @@ class DialogCompare(QDialog):
         item_Change = min(matrix, key=change_Background)
         return item_Change
 
+    def get_Point(self, data):
+        temp = []
+        for items in data:
+            if items not in temp:
+                temp.append(items)
+        return temp
+
     def add_HTML(self, point, start_Point, modeStart, modeReturn):
         try:
             list_Total = ""
-            distance, time = self.cal_Real(point, start_Point, modeStart, modeReturn)
+            distance, time = self.cal_Real(
+                self.get_Point(point), start_Point, modeStart, modeReturn
+            )
             item_Change = self.hilight_Item(distance, self.data_Matrix)
             for index, value in enumerate(self.data_Title):
                 list_Total += f"""

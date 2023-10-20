@@ -130,6 +130,7 @@ class show_Real_Data:
             return None
 
     def show_WayPoint(self, point):
+        print("check value data point", point, len(point))
         total_distance = 0
         total_duration = 0
         for i in range(len(point) - 1):

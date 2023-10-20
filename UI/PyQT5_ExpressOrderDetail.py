@@ -57,6 +57,17 @@ class CheckBoxHeader(QCheckBox):
     def __init__(self, parent=None):
         super().__init__(parent)
 
+    #     self.stateChanged.connect(self.check_all)
+
+    # def set_checked(self, checked):
+    #     self.setChecked(checked)
+
+    # def check_all(self, state):
+    #     if state == Qt.Checked:
+    #         for checkbox in checkboxes:
+    #             if checkbox != self:
+    #                 checkbox.set_checked(True)
+
 
 class TableWidget(QTableWidget):
     def __init__(self):
@@ -238,15 +249,14 @@ class TableWidget(QTableWidget):
             if self.cellWidget(row, 0).findChild(QCheckBox).isChecked():
                 selected_rows.append(row)
         selected_data = []
-        # hàm lấy tất cẳ dữ liệu của các cột: Chỉnh sửa hiển thị check all hiển thị tất cả.
         if selected_rows == [0]:
+            # CheckBoxHeader(QCheckBox).setChecked(True)
             for row in range(1, self.rowCount()):
                 row_data = []
                 for col in range(self.columnCount()):
                     item = self.item(row, col)
                     if item:
                         row_data.append(item.text())
-                    # self.cellWidget(row, col).findChild(QCheckBox).isChecked(True)
                 selected_data.append(row_data)
             return selected_data
         else:
