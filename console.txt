@@ -6,3 +6,12 @@ pip freeze
 
 Lệnh build file:
 pyinstaller.exe --onefile --windowed --name tms --icon=E:\PythonGUI-ManageEmployee\Pyqt5\logo.ico  main.py
+
+inno setup thêm uninstall vào thư mục cài đặt:
+
+[UninstallRun]
+Filename: "{app}\{#MyAppExeName}"; \
+    Flags: runascurrentuser waituntilterminated runhidden; \
+    RunOnceId: "Uninstall"
+
+Cấu hình file

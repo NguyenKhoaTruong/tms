@@ -6,6 +6,8 @@
 *.zip
 *.tar.gz
 *.rar
+*.txt
+
 
 # remove folder
 dist/

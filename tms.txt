@@ -111,10 +111,9 @@ check tại sao km distanc rouet lại khác nhau.
 
 doc build : https://www.pythonguis.com/tutorials/packaging-pyqt5-pyside2-applications-windows-pyinstaller/
 erorr build file:
-    phiên bản của python.✅
-    phiên bản của pyinstaller'✅
     Tìm cách biuld file tối giản
-viết readme và lisant
 
 
 drone example : https://github.com/wangyeee/MiniGCS
+
+https://github.com/topics/pyqt5-application
