@@ -247,6 +247,33 @@ def type_Cs_Cluster():
 def css_DialogCompare():
     styles = """
     <style>
+        .main{
+            display: flex;
+        }
+        .tab-des{
+            width:200px;
+            height:200px;
+            border-radius:5px;
+            position:absolute;
+            z-index:1000;
+            right:0px;
+            top:10px;
+            font-size:15px;
+            background-color:#fd9931;
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            grid-gap: 10px;
+        }
+        .normal{
+            display:flex
+        }
+        .icon-normal{
+            background-color:#fd9931;
+        }
+        .text-normal{
+            background-color:#fd9931;
+            font-size:15px
+        }
         .container{
             width:400px;
             height:400px;

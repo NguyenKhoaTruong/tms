@@ -3,9 +3,11 @@ import sys
 sys.path.append("E:\PythonGUI-ManageEmployee\Pyqt5")
 from PyQt5.QtWidgets import QVBoxLayout, QDialog
 from Algorithm.Cluster.Randomized_Tour import Randomized_Tour_Cluster
+from Algorithm.Cluster.Nearest_Neighbor import Nearest_Neighbor_Cluster
 from Algorithm.Cluster.Christofides_Algorithm import Christofides
-from Algorithm.Cluster.Ant_ColonyOptimization import Ant
 from Process_Data.PyQT5_distanceMatrix import distance_Matrix
+from Algorithm.Cluster.Brute_Force import Brute_Force_Cluster
+from Algorithm.Cluster.Ant_ColonyOptimization import Ant
 from Process_Data.PyQT5_Data_Real import show_Real_Data
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 from Algorithm.Cluster.Tabu_Search import Tabu
@@ -19,7 +21,14 @@ class DialogCompare(QDialog):
     def __init__(self, data, parent=None):
         super().__init__(parent)
         self.web_view = QWebEngineView()
-        self.data_Title = ["Random Tour", "Christofides", "Ant Colony", "Tabu Search"]
+        self.data_Title = [
+            "Random Tour",
+            "Christofides",
+            "Ant Colony",
+            "Tabu Search",
+            "Brute Force",
+            "Nearest Neighbor",
+        ]
         self.data_Matrix = []
         self.ui(data)
 
@@ -27,7 +36,7 @@ class DialogCompare(QDialog):
         self.setWindowTitle("Compare TSP")
         self.layout_ = QVBoxLayout()
         self.setLayout(self.layout_)
-        self.resize(600, 450)
+        self.resize(800, 600)
         self.show_HTML(data)
         icon = QIcon("logo.ico")
         self.setWindowIcon(icon)
@@ -46,6 +55,12 @@ class DialogCompare(QDialog):
             self.data_Matrix.append(tabu)
             ant = self.cal_Ant(point, start_Point, mode_Start, mode_Return)
             self.data_Matrix.append(ant)
+            nearest = self.cal_NearestNeighbor(
+                point, start_Point, mode_Start, mode_Return
+            )
+            self.data_Matrix.append(nearest)
+            brute = self.cal_BruteForce(point, start_Point, mode_Start, mode_Return)
+            self.data_Matrix.append(brute)
             return self.data_Matrix
         except ValueError as e:
             print("Log Error", e)
@@ -84,6 +99,31 @@ class DialogCompare(QDialog):
             return cost
         except ValueError as e:
             print("Log Error", e)
+
+    def cal_NearestNeighbor(self, point, start_Point, mode_Start, mode_Return):
+        try:
+            # distance_matrix, start_point_index, points, on, off
+            if mode_Start == True and start_Point not in point:
+                point.insert(0, start_Point)
+            distance = distance_Matrix.calculate_distances(point)
+            route, cost = Nearest_Neighbor_Cluster.tsp_nearest_neighbor(
+                distance, 0, point, mode_Return, not mode_Return
+            )
+            return cost
+        except ValueError as e:
+            raise ("Log Error", e)
+
+    def cal_BruteForce(self, point, start_Point, mode_Start, mode_Return):
+        try:
+            if mode_Start == True and start_Point not in point:
+                point.insert(0, start_Point)
+            distance = distance_Matrix.calculate_distances(point)
+            cost, route = Brute_Force_Cluster.brute_force_tsp(
+                point, distance, start_Point, mode_Return, not mode_Return
+            )
+            return cost
+        except ValueError as e:
+            raise ("Log Error", e)
 
     def convent_Point(self, data):
         data_ = []
@@ -163,9 +203,21 @@ class DialogCompare(QDialog):
                     {css.css_DialogCompare()}
                 </head>
                 <body>
-                    <div class="container">
-                        {content_HTML}
-                    <div>
+                    <div class="main">
+                        <div class="container">
+                            {content_HTML}
+                        <div>
+                        <div class="tab-des">
+                            <div class="normal">
+                                <span class="icon-normal">•</span>
+                                <span class="text-normal">Normal</span>
+                            </div>
+                            <div class="best">
+                                span class="icon-best">•</span>
+                                <span class="text-best">Best</span>
+                            </div>
+                        </div>
+                    </div>
                 </body>
                 </html>
                 """

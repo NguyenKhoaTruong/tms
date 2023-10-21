@@ -27,7 +27,7 @@ class Show_Map_TSP_Cluster:
         load_dotenv()
         self.web_view = QWebEngineView()
         self.api_Key = os.getenv("API_KEY")
-
+        self.time = ""
         data_Point = self.convent_Data(dataPoint)
         data_Matrix = self.convent_Data_Matrix(data_array)
         # maker_Point = self.marker_Points(data_Point)
@@ -166,7 +166,16 @@ class Show_Map_TSP_Cluster:
                 )
                 eta_ETD.append((time, estimated_time))
                 time = estimated_time
+        start_Time = datetime.combine(datetime.today(), time_Ship[0])
+        self.time = self.time_Route(start_Time, time)
         return eta_ETD
+
+    def time_Route(self, start_Time, end_Time):
+        time = end_Time - start_Time
+        hours, remainder = divmod(time.seconds, 3600)
+        minutes, _ = divmod(remainder, 60)
+        str_Time = f"""{hours} giờ {minutes} phút"""
+        return str_Time
 
     def convent_Hour(self, hours):
         hour = hours.hour
@@ -280,8 +289,8 @@ class Show_Map_TSP_Cluster:
                                 KM - Route:{distance_Real[:-2]} KM</br>
                             </div>  
                             <div class="title-text">
-                                Time - Route:{time_Real}</br>
-                            </div> 
+                                Time - Route:{self.time}</br>
+                            </div>  
                         </div>
                     </div>
                     <div id="map" style="height: 830px; width: 100%;"></div>
