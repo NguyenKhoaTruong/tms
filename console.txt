@@ -15,3 +15,13 @@ Filename: "{app}\{#MyAppExeName}"; \
     RunOnceId: "Uninstall"
 
 Cấu hình file
+
+
+viết Scrip python to  C#:
+đầu vào: danh sách các order + số lượng cụm , thuật toán muốn sử dụng.
+thuật toán đang còn sử dụng được:
+    Tabu Search.
+    Ant Colony.
+    RandomTour.
+    Nearest neightborr.
+    Chirtofect.
