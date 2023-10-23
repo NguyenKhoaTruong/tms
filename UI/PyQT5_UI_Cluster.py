@@ -94,7 +94,7 @@ class ui_Cluster(QWidget):
         self.cbTSP = QComboBox()
         self.cbTSP.addItem("Nearest Neighbor")
         self.cbTSP.addItem("Randomized Tour")
-        self.cbTSP.addItem("Brute Force")
+        # self.cbTSP.addItem("Brute Force")
         # self.cbTSP.addItem("Branch And Bound")
         # self.cbTSP.addItem("2-OPT")
         # self.cbTSP.addItem("Line Kernighan Heuristic")

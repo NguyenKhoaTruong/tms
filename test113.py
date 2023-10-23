@@ -107,14 +107,16 @@
 
 # #     check value time start: 2023-10-21 07:00:00
 # # check value data time 2023-10-21 10:51:53.520000
-from datetime import datetime
+# from datetime import datetime
 
-# Tạo hai đối tượng datetime
-date1 = datetime(2023, 10, 21, 12, 0, 0)
-date2 = datetime(2023, 10, 20, 10, 30, 0)
+# # Tạo hai đối tượng datetime
+# date1 = datetime(2023, 10, 21, 12, 0, 0)
+# date2 = datetime(2023, 10, 20, 10, 30, 0)
 
-# Trừ hai đối tượng datetime
-time_difference = date1 - date2
+# # Trừ hai đối tượng datetime
+# time_difference = date1 - date2
 
-# In ra kết quả
-print("Khoảng thời gian giữa date1 và date2 là:", time_difference)
+# # In ra kết quả
+# print("Khoảng thời gian giữa date1 và date2 là:", time_difference)
+# data = "98.69 km"
+# print(data[:-2])

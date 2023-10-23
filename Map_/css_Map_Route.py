@@ -251,27 +251,38 @@ def css_DialogCompare():
             display: flex;
         }
         .tab-des{
-            width:200px;
-            height:200px;
-            border-radius:5px;
+            width:140px;
+            height:140px;
+            border-bottom-left-radius: 10px;
             position:absolute;
             z-index:1000;
             right:0px;
-            top:10px;
-            font-size:15px;
-            background-color:#fd9931;
+            top:20px;
+            background-color:#222b5f;
             display: grid;
             grid-template-columns: repeat(1, 1fr);
-            grid-gap: 10px;
+            align-items: center;
         }
         .normal{
-            display:flex
+            font-weight: bold;
+            padding-left: 15px;
         }
         .icon-normal{
-            background-color:#fd9931;
+            color:#fd9931;
         }
         .text-normal{
-            background-color:#fd9931;
+            color:#fd9931;
+            font-size:15px
+        }
+        .best{
+            font-weight: bold;
+            padding-left: 15px;
+        }
+        .icon-best{
+            color:red;
+        }
+        .text-best{
+            color:red;
             font-size:15px
         }
         .container{
