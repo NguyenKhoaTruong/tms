@@ -199,35 +199,40 @@ class DialogCompare(QDialog):
         return data_Time
 
     def calculator_ETA_ETD(self, point, time_Ship):
-        time_Delivery = ""
-        time = datetime.combine(datetime.today(), time_Ship[0])
-        before_Time = time_Ship[1]
-        service_Time = time_Ship[2]
-        after_Time = time_Ship[3]
-        if time_Ship[4] == "0" or time_Ship[4] == "1":
-            congestion_Time = int(time_Ship[4])
-        else:
-            congestion_Time = float(time_Ship[4])
-        for i in range(len(point)):
-            origin = f"{point[i][0]},{point[i][1]}"
-            destination = (
-                f"{point[i + 1][0]},{point[i + 1][1]}" if i + 1 < len(point) else origin
-            )
-
-            distance = show_Real_Data().get_distance(origin, destination)
-            if distance is not None:
-                traffic_Time = distance + (distance * congestion_Time)
-                estimated_time = (
-                    time
-                    + timedelta(minutes=before_Time)
-                    + timedelta(minutes=traffic_Time)
-                    + timedelta(minutes=service_Time)
-                    + timedelta(minutes=after_Time)
+        try:
+            time_Delivery = ""
+            time = datetime.combine(datetime.today(), time_Ship[0])
+            before_Time = time_Ship[1]
+            service_Time = time_Ship[2]
+            after_Time = time_Ship[3]
+            if time_Ship[4] == "0" or time_Ship[4] == "1":
+                congestion_Time = int(time_Ship[4])
+            else:
+                congestion_Time = float(time_Ship[4])
+            for i in range(len(point)):
+                origin = f"{point[i][0]},{point[i][1]}"
+                destination = (
+                    f"{point[i + 1][0]},{point[i + 1][1]}"
+                    if i + 1 < len(point)
+                    else origin
                 )
-                time = estimated_time
-        start_Time = datetime.combine(datetime.today(), time_Ship[0])
-        time_Delivery = self.time_Route(start_Time, time)
-        return time_Delivery
+
+                distance = show_Real_Data().get_distance(origin, destination)
+                if distance is not None:
+                    traffic_Time = distance + (distance * congestion_Time)
+                    estimated_time = (
+                        time
+                        + timedelta(minutes=before_Time)
+                        + timedelta(minutes=traffic_Time)
+                        + timedelta(minutes=service_Time)
+                        + timedelta(minutes=after_Time)
+                    )
+                    time = estimated_time
+            start_Time = datetime.combine(datetime.today(), time_Ship[0])
+            time_Delivery = self.time_Route(start_Time, time)
+            return time_Delivery
+        except ValueError as e:
+            raise ("Log Error", e)
 
     def time_Route(self, start_Time, end_Time):
         time = end_Time - start_Time
@@ -245,9 +250,9 @@ class DialogCompare(QDialog):
                 distance, time = self.cal_Real(
                     items, start_Point, modeStart, modeReturn
                 )
-                # time__ = self.calculator_ETA_ETD(items, self.get_ParamTime(data)[0]) thời gian thực tế đi kèm
+                time__ = self.calculator_ETA_ETD(items, self.get_ParamTime(data)[0])
                 data_Distance.append(distance)
-                data_Time.append(time)
+                data_Time.append(time__)
             item_Change = self.hilight_Item(distance, self.data_Matrix)
             for index, value in enumerate(self.data_Title):
                 list_Total += f"""
