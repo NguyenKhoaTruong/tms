@@ -201,6 +201,43 @@ def route_To_Order(route, data_Order):
     return orders
 
 
+def haversine_distance(coord1, coord2):
+    R = 6371  # Bán kính của Trái Đất trong kilômét
+    lat1, lon1 = np.radians(list(coord1))
+    lat2, lon2 = np.radians(list(coord2))
+
+    dlat = lat2 - lat1
+    dlon = lon2 - lon1
+
+    a = np.sin(dlat / 2) ** 2 + np.cos(lat1) * np.cos(lat2) * np.sin(dlon / 2) ** 2
+    c = 2 * np.arctan2(np.sqrt(a), np.sqrt(1 - a))
+
+    distance = R * c
+    return distance
+
+
+def show_radius_Cluster(data_point, data_center):
+    radius = []
+    for i, group in enumerate(data_point):
+        max_distance = 0
+        for point in group:
+            distance = haversine_distance(point, data_center[i])
+            if distance > max_distance:
+                max_distance = distance
+        radius.append(max_distance)
+    radius = np.array(radius) * 1000
+    return radius
+
+
+def get_DataPoint(data):
+    point = []
+    for items in data:
+        for value in items:
+            if value not in point:
+                point.append(value)
+    return point
+
+
 def show_Result(points, start_Point, matrix, name_Algorithm):
     try:
         if start_Point and start_Point not in points:
@@ -219,43 +256,165 @@ def show_Result(points, start_Point, matrix, name_Algorithm):
         raise ("Log Error", e)
 
 
+def data_ShowMap(data_Center, data_Radius, all_Points, key):
+    html_content = f"""
+        <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Google Maps Cluster</title>
+                <script src="https://maps.googleapis.com/maps/api/js?key={key}&callback=initMap" async defer></script>
+                <script>
+                    function initMap() {{
+                        var map = new google.maps.Map(document.getElementById('map'), {{
+                            center: {{lat: {data_Center[0][0]}, lng: {data_Center[0][1]}}}, // Điểm trung tâm ban đầu
+                            zoom: 12 // Độ phóng ban đầu
+                        }});
+                        
+                        // Hiển thị điểm trung tâm dữ liệu và đường tròn
+                        for (var i = 0; i < {len(data_Center)}; i++) {{
+                            var center = new google.maps.LatLng({data_Center}[i][0], {data_Center}[i][1]);
+                            var marker = new google.maps.Marker({{
+                            position: center,
+                            map: map,
+                            title: 'Data Point'
+                            }});
+
+                            var circle = new google.maps.Circle({{
+                            center: center,
+                            radius: {list(data_Radius)}[i],
+                            strokeColor: '#FF0000',
+                            strokeOpacity: 0.8,
+                            strokeWeight: 2,
+                            fillColor: '#d59696',
+                            fillOpacity: 0.35,
+                            map: map
+                            }});
+                        }}
+                        
+                        // Hiển thị tất cả điểm dữ liệu
+                        {all_Points}.forEach(function (point) {{
+                            var marker = new google.maps.Marker({{
+                                position: new google.maps.LatLng(point[0], point[1]),
+                                map: map,
+                                title: 'Data Point'
+                            }});
+                        }});
+                    }}
+                </script>
+            </head>
+                <body>
+                    <div id="map" style="height: 830px; width: 100%;">
+                </body>
+            </html>
+            """
+    return html_content
+
+
 def fun_GetPointTrip(data, start_Point, num_Cluster, name_Algorithm):
+    key = "AIzaSyAXiMLkRaq16MeTMVOFnYWqxDd0TCV3prU"
     data_Order = []
+    data_Map = ""
     data_Matrix, data_Point, data_Center = cluster(data, num_Cluster)
-    num_Trip = len(data_Matrix)
     for index, value in enumerate(data_Point):
         route = show_Result(
             data_Point[index], start_Point, data_Matrix[index], name_Algorithm
         )
         data_Order.append(route)
-
-    # lấy dữ liệu bản đồ:
-
+    radius = show_radius_Cluster(data_Point, data_Center)
+    all_Point = get_DataPoint(data_Point)
+    data_Map = data_ShowMap(data_Center.tolist(), radius, all_Point, key)
     return data_Order
 
 
-def data_ShowMap():
-    html = f""" Có cái con cá"""
-    return html
-
-
-data = [
-    ["MC220509000004", 1230700002, 0.0, 0.0, 1.0, 10.771136, 106.695072],
-    ["MC2204030071", 1230700003, 0.0, 0.0, 1.0, 10.447162, 106.327136],
-    ["MC220426000001", 1230700004, 0.0, 0.0, 1.0, 10.851344, 104.704646],
-    ["MC2204030078", 1230700005, 0.0, 0.0, 1.0, 10.423718, 106.158803],
-    ["MC2204030077", 1230700006, 0.0, 0.0, 1.0, 10.916539, 106.106612],
-    ["MC220510000001", 1230700007, 0.0, 0.0, 1.0, 10.858458, 108.388389],
-    ["MC190703000012", 1230700008, 0.0, 0.0, 1.0, 10.824141, 106.692206],
-    ["MC190703000013", 1230700009, 0.0, 0.0, 1.0, 10.824257, 106.692249],
-    ["MC190703000014", 1230700010, 0.0, 0.0, 1.0, 10.833772, 106.670660],
-    ["MC190703000015", 1230700011, 0.0, 0.0, 1.0, 10.754418, 106.651638],
-    ["MC190703000016", 1230700012, 0.0, 0.0, 1.0, 10.737763, 106.725514],
-    ["MC190703000017", 1230700013, 0.0, 0.0, 1.0, 10.780984, 106.631563],
-]
-start_Point = [10.447161, 106.327116]
-num_Cluster = 2
-name_Algorithm = "Randomized Tour"
-fun_GetPointTrip(data, start_Point, num_Cluster, name_Algorithm)
+# data = [
+#     [
+#         "MC220509000004",
+#         1230700002,
+#         0.0,
+#         0.0,
+#         1.0,
+#         10.827673713865051,
+#         106.68736148070087,
+#     ],
+#     ["MC2204030071", 1230700003, 0.0, 0.0, 1.0, 10.844179819400372, 106.67738144346437],
+#     [
+#         "MC220426000001",
+#         1230700004,
+#         0.0,
+#         0.0,
+#         1.0,
+#         10.845808014245465,
+#         106.65698530399546,
+#     ],
+#     ["MC2204030078", 1230700005, 0.0, 0.0, 1.0, 10.829913344037724, 106.67070386216511],
+#     ["MC2204030077", 1230700006, 0.0, 0.0, 1.0, 10.85541264037055, 106.78993997441134],
+#     [
+#         "MC220510000001",
+#         1230700007,
+#         0.0,
+#         0.0,
+#         1.0,
+#         10.86506889143602,
+#         106.80371688756779,
+#     ],
+#     [
+#         "MC190703000012",
+#         1230700008,
+#         0.0,
+#         0.0,
+#         1.0,
+#         10.854527653159472,
+#         106.80939995968937,
+#     ],
+#     [
+#         "MC190703000013",
+#         1230700009,
+#         0.0,
+#         0.0,
+#         1.0,
+#         10.791102482128817,
+#         106.70583697964395,
+#     ],
+#     [
+#         "MC190703000014",
+#         1230700010,
+#         0.0,
+#         0.0,
+#         1.0,
+#         10.791183609986648,
+#         106.69825949982476,
+#     ],
+#     [
+#         "MC190703000015",
+#         1230700011,
+#         0.0,
+#         0.0,
+#         1.0,
+#         10.782966523027511,
+#         106.69814911155156,
+#     ],
+#     [
+#         "MC190703000016",
+#         1230700012,
+#         0.0,
+#         0.0,
+#         1.0,
+#         10.775324727445424,
+#         106.68628599389933,
+#     ],
+#     [
+#         "MC190703000017",
+#         1230700013,
+#         0.0,
+#         0.0,
+#         1.0,
+#         10.76892116200224,
+#         106.68502692753195,
+#     ],
+# ]
+# start_Point = [10.810174157308571, 106.66492499243704]
+# num_Cluster = 3
+# name_Algorithm = "Randomized Tour"
+# fun_GetPointTrip(data, start_Point, num_Cluster, name_Algorithm)
 
 # Vẽ map thêm 3 các thuật toán có thể sử dụng được:

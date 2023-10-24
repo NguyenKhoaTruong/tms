@@ -59,6 +59,7 @@ class Show_Map_Cluster:
     ):
         self.show_valueAllPoint(dataPoints)
         data_Center = [list(point) for point in dataCenters]
+        print("check value data center", data_Center, len(data_Center))
         data_Kg = self.show_DataKgM(dataPoints, data_Matrix)
         data_Points_ = np.array(self.data_Point_Clean, dtype=object)
         data_Kg_M3_Drops = np.array(data_Kg, dtype=object)
