@@ -229,19 +229,20 @@ def show_radius_Cluster(data_point, data_center):
     return radius
 
 
-def get_DataPoint(data):
-    point = []
-    for items in data:
-        for value in items:
-            if value not in point:
-                point.append(value)
-    return point
-
-
 def show_Result(points, start_Point, matrix, name_Algorithm):
     try:
+        order_StartPoint = [
+            "MCStart",
+            "Điểm bắt đầu",
+            0.0,
+            0.0,
+            1.0,
+            start_Point[0],
+            start_Point[1],
+        ]
         if start_Point and start_Point not in points:
-            points.append(start_Point)
+            points.insert(0, start_Point)
+            matrix.insert(0, order_StartPoint)
         distance = calculate_distances(points)
         if name_Algorithm == "Brute Force":
             route, cost = brute_force_tsp(points, distance, start_Point)
@@ -256,74 +257,38 @@ def show_Result(points, start_Point, matrix, name_Algorithm):
         raise ("Log Error", e)
 
 
-def data_ShowMap(data_Center, data_Radius, all_Points, key):
-    html_content = f"""
-        <!DOCTYPE html>
-            <html>
-            <head>
-                <title>Google Maps Cluster</title>
-                <script src="https://maps.googleapis.com/maps/api/js?key={key}&callback=initMap" async defer></script>
-                <script>
-                    function initMap() {{
-                        var map = new google.maps.Map(document.getElementById('map'), {{
-                            center: {{lat: {data_Center[0][0]}, lng: {data_Center[0][1]}}}, // Điểm trung tâm ban đầu
-                            zoom: 12 // Độ phóng ban đầu
-                        }});
-                        
-                        // Hiển thị điểm trung tâm dữ liệu và đường tròn
-                        for (var i = 0; i < {len(data_Center)}; i++) {{
-                            var center = new google.maps.LatLng({data_Center}[i][0], {data_Center}[i][1]);
-                            var marker = new google.maps.Marker({{
-                            position: center,
-                            map: map,
-                            title: 'Data Point'
-                            }});
+def get_DataPoint(data, start_Point):
+    point = []
+    if start_Point:
+        point.insert(0, start_Point)
+        for items in data:
+            lat = items[5]
+            lon = items[6]
+            point.append([lat, lon])
+    return point
 
-                            var circle = new google.maps.Circle({{
-                            center: center,
-                            radius: {list(data_Radius)}[i],
-                            strokeColor: '#FF0000',
-                            strokeOpacity: 0.8,
-                            strokeWeight: 2,
-                            fillColor: '#d59696',
-                            fillOpacity: 0.35,
-                            map: map
-                            }});
-                        }}
-                        
-                        // Hiển thị tất cả điểm dữ liệu
-                        {all_Points}.forEach(function (point) {{
-                            var marker = new google.maps.Marker({{
-                                position: new google.maps.LatLng(point[0], point[1]),
-                                map: map,
-                                title: 'Data Point'
-                            }});
-                        }});
-                    }}
-                </script>
-            </head>
-                <body>
-                    <div id="map" style="height: 830px; width: 100%;">
-                </body>
-            </html>
-            """
+
+def data_ShowMap(data_Center, data_Radius, all_Points):
+    html_content = f"""<script>function initMap(){{var map = new google.maps.Map(document.getElementById('map'),{{center:{{lat:{data_Center[0][0]},lng:{data_Center[0][1]}}},zoom:12}});for (var i=0; i<{len(data_Center)};i++){{var center =new google.maps.LatLng({data_Center}[i][0],{data_Center}[i][1]);var marker =new google.maps.Marker({{position:center,map:map,title:'Data Point'}});var circle =new google.maps.Circle({{center:center,radius:{list(data_Radius)}[i],strokeColor:'#FF0000',strokeOpacity:0.8,strokeWeight:2,fillColor:'#d59696',fillOpacity: 0.35,map:map}});}}{list(all_Points)}.forEach(function(point){{var marker =new google.maps.Marker({{position:new google.maps.LatLng(point[0],point[1]),map:map,title:'Data Point'}});}});}}</script>"""
     return html_content
 
 
 def fun_GetPointTrip(data, start_Point, num_Cluster, name_Algorithm):
-    key = "AIzaSyAXiMLkRaq16MeTMVOFnYWqxDd0TCV3prU"
-    data_Order = []
-    data_Map = ""
-    data_Matrix, data_Point, data_Center = cluster(data, num_Cluster)
-    for index, value in enumerate(data_Point):
-        route = show_Result(
-            data_Point[index], start_Point, data_Matrix[index], name_Algorithm
-        )
-        data_Order.append(route)
-    radius = show_radius_Cluster(data_Point, data_Center)
-    all_Point = get_DataPoint(data_Point)
-    data_Map = data_ShowMap(data_Center.tolist(), radius, all_Point, key)
-    return data_Order
+    try:
+        data_Order = []
+        data_Map = ""
+        data_Matrix, data_Point, data_Center = cluster(data, num_Cluster)
+        for index, value in enumerate(data_Point):
+            route = show_Result(
+                data_Point[index], start_Point, data_Matrix[index], name_Algorithm
+            )
+            data_Order.append(route)
+        radius = show_radius_Cluster(data_Point, data_Center)
+        all_Point = get_DataPoint(data, start_Point)
+        data_Map = data_ShowMap(data_Center.tolist(), radius, all_Point)
+        return data_Map, data_Order
+    except ValueError as e:
+        raise ("Log Error", e)
 
 
 # data = [
@@ -414,7 +379,5 @@ def fun_GetPointTrip(data, start_Point, num_Cluster, name_Algorithm):
 # ]
 # start_Point = [10.810174157308571, 106.66492499243704]
 # num_Cluster = 3
-# name_Algorithm = "Randomized Tour"
+# name_Algorithm = "Brute Force"
 # fun_GetPointTrip(data, start_Point, num_Cluster, name_Algorithm)
-
-# Vẽ map thêm 3 các thuật toán có thể sử dụng được:

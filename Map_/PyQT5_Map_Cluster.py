@@ -140,7 +140,6 @@ class Show_Map_Cluster:
             for value in data:
                 self.all_Points.append([value[0], value[1]])
         return self.all_Points
-
     def haversine_distance(self, coord1, coord2):
         R = 6371  # Bán kính của Trái Đất trong kilômét
         lat1, lon1 = np.radians(list(coord1))
