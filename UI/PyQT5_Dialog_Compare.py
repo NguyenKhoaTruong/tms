@@ -250,12 +250,14 @@ class DialogCompare(QDialog):
                 if modeReturn == False:
                     route = []
                     for values in items:
-                        if values not in route:
-                            route.append(values)  # lọc phần tử trùng là ra.
+                        lat = values[0]
+                        lon = values[1]
+                        if [lat, lon] not in route:
+                            route.append([lat, lon])
                 distance, time = self.cal_Real(
-                    items, start_Point, modeStart, modeReturn
+                    route, start_Point, modeStart, modeReturn
                 )
-                time__ = self.calculator_ETA_ETD(items, self.get_ParamTime(data)[0])
+                time__ = self.calculator_ETA_ETD(route, self.get_ParamTime(data)[0])
                 data_Distance.append(distance)
                 data_Time.append(time__)
             item_Change = self.hilight_Item(distance, self.data_Matrix)
