@@ -247,6 +247,11 @@ class DialogCompare(QDialog):
             data_Time = []
             list_Total = ""
             for items in self.data_Route:
+                if modeReturn == False:
+                    route = []
+                    for values in items:
+                        if values not in route:
+                            route.append(values)  # lọc phần tử trùng là ra.
                 distance, time = self.cal_Real(
                     items, start_Point, modeStart, modeReturn
                 )

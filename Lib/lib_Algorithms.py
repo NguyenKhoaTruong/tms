@@ -1,14 +1,10 @@
 from geopy.distance import great_circle
-from sklearn.cluster import KMeans
-import networkx as nx
-import numpy as np
 import itertools
 import random
 import math
+import numpy as np
 
 
-# Algorithm
-# Brute Force:
 def brute_force_tsp(points, distance_matrix, start_point):
     def total_distance(route, distance_matrix):
         total = 0
@@ -119,38 +115,6 @@ def tsp_nearest_neighbor(distance_matrix, start_point_index, points):
     return tsp_path_latlon, total_distance
 
 
-# Ant Colony Optimization
-# Tabu Search
-# -------------------------------------------------------------------------------------#
-def format_path_to_string(path, points):
-    path_String = []
-    for i in range(len(path)):
-        lat, lon = points[path[i]]
-        path_String.append([lat, lon])
-    return path_String
-
-
-def convert_Data(data_Cluster):
-    data_array = np.array(data_Cluster)
-    array_Matrix = np.array([[float(item[5]), float(item[6])] for item in data_array])
-    return data_array, array_Matrix
-
-
-def convent_Data_Point(data):
-    point = []
-    for value in data:
-        sub_Data = []
-        if len(value) == 0:
-            print("...")
-        else:
-            for item in value:
-                lat = item[5]
-                lon = item[6]
-                sub_Data.append([float(lat), float(lon)])
-            point.append(sub_Data)
-    return point
-
-
 def calculate_distances(data):
     def euclidean_distance(point1, point2):
         distances = great_circle(point1, point2).kilometers
@@ -167,27 +131,12 @@ def calculate_distances(data):
     return distances
 
 
-def cluster(data_Cluster, num_Cluster):
-    data_Matrix = []
-    data_Point = []
-    num_clusters = num_Cluster
-    data, matrix_data = convert_Data(data_Cluster)
-    kmeans = KMeans(n_clusters=int(num_clusters))
-    kmeans.fit(matrix_data)
-
-    label_Data = kmeans.labels_
-    center_Data = kmeans.cluster_centers_
-
-    for i in range(int(num_clusters)):
-        cluster_data = [
-            data_Cluster[j] for j in range(len(data_Cluster)) if label_Data[j] == i
-        ]
-        data_Matrix.append(cluster_data)
-    for i in range(int(num_clusters)):
-        cluster_points = matrix_data[label_Data == i]
-        data_Point.append(cluster_points)
-    points = convent_Data_Point(data_Matrix)
-    return data_Matrix, points, center_Data
+def format_path_to_string(path, points):
+    path_String = []
+    for i in range(len(path)):
+        lat, lon = points[path[i]]
+        path_String.append([lat, lon])
+    return path_String
 
 
 def route_To_Order(route, data_Order):
@@ -199,34 +148,6 @@ def route_To_Order(route, data_Order):
             order = item[1]
             orders.append(order)
     return orders
-
-
-def haversine_distance(coord1, coord2):
-    R = 6371  # Bán kính của Trái Đất trong kilômét
-    lat1, lon1 = np.radians(list(coord1))
-    lat2, lon2 = np.radians(list(coord2))
-
-    dlat = lat2 - lat1
-    dlon = lon2 - lon1
-
-    a = np.sin(dlat / 2) ** 2 + np.cos(lat1) * np.cos(lat2) * np.sin(dlon / 2) ** 2
-    c = 2 * np.arctan2(np.sqrt(a), np.sqrt(1 - a))
-
-    distance = R * c
-    return distance
-
-
-def show_radius_Cluster(data_point, data_center):
-    radius = []
-    for i, group in enumerate(data_point):
-        max_distance = 0
-        for point in group:
-            distance = haversine_distance(point, data_center[i])
-            if distance > max_distance:
-                max_distance = distance
-        radius.append(max_distance)
-    radius = np.array(radius) * 1000
-    return radius
 
 
 def show_Result(points, start_Point, matrix, name_Algorithm):
@@ -257,33 +178,15 @@ def show_Result(points, start_Point, matrix, name_Algorithm):
         raise ("Log Error", e)
 
 
-def get_DataPoint(data):
-    point = []
-    for items in data:
-        lat = items[5]
-        lon = items[6]
-        point.append([lat, lon])
-    return point
-
-
-def data_ShowMap(data_Center, data_Radius, all_Points):
-    html_content = f"""<script>function initMap(){{var map = new google.maps.Map(document.getElementById('map'),{{center:{{lat:{data_Center[0][0]},lng:{data_Center[0][1]}}},zoom:12}});for (var i=0; i<{len(data_Center)};i++){{var center =new google.maps.LatLng({data_Center}[i][0],{data_Center}[i][1]);var marker =new google.maps.Marker({{position:center,map:map,title:'Data Point'}});var circle =new google.maps.Circle({{center:center,radius:{list(data_Radius)}[i],strokeColor:'#FF0000',strokeOpacity:0.8,strokeWeight:2,fillColor:'#d59696',fillOpacity: 0.35,map:map}});}}{list(all_Points)}.forEach(function(point){{var marker =new google.maps.Marker({{position:new google.maps.LatLng(point[0],point[1]),map:map,title:'Data Point'}});}});}}</script>"""
-    return html_content
-
-
-def fun_GetPointTrip(data, start_Point, num_Cluster, name_Algorithm):
-    try:
-        data_Order = []
-        data_Map = ""
-        data_Matrix, data_Point, data_Center = cluster(data, num_Cluster)
-        for index, value in enumerate(data_Point):
-            route = show_Result(
-                data_Point[index], start_Point, data_Matrix[index], name_Algorithm
-            )
-            data_Order.append(route)
-        radius = show_radius_Cluster(data_Point, data_Center)
-        all_Point = get_DataPoint(data)
-        data_Map = data_ShowMap(data_Center.tolist(), radius, all_Point)
-        return data_Map, data_Order
-    except ValueError as e:
-        raise ("Log Error", e)
+def funtion_Algorithm(data_Point, data_Matrix, start_Point, name_Algorithm):
+    data_Order = []
+    for index, value in enumerate(list(data_Point)):
+        route = show_Result(
+            list(data_Point[index]),
+            start_Point,
+            list(data_Matrix[index]),
+            name_Algorithm,
+        )
+        data_Order.append(route)
+        # print("check value data order", data_Order)
+    return data_Order

@@ -25,3 +25,5 @@ thuật toán đang còn sử dụng được:
     RandomTour.
     Nearest neightborr.
     Chirtofect.
+Lệnh chuyển đổi sang file dll:
+clr.CompileModules("path_to.dll", "path_to.py");

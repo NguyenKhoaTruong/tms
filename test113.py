@@ -1,122 +1,90 @@
-# # from sklearn.metrics.pairwise import haversine_distances
-# # from math import radians
-# # import pandas as pd
-# # from sklearn.cluster import KMeans
-# # from sklearn.preprocessing import StandardScaler
-
-# # data = pd.read_csv("data.csv")
-
-# # scaler = StandardScaler()
-# # data[["payload"]] = scaler.fit_transform(data[["payload"]])
-# # data["lat_rad"] = data["lat"].apply(lambda x: radians(x))
-# # data["lon_rad"] = data["lon"].apply(lambda x: radians(x))
-# # coords = data[["lat_rad", "lon_rad"]]
-# # data["haversine"] = haversine_distances(coords, coords) * 6371000
-# # kmeans = KMeans(n_clusters=3)
-# # data["cluster"] = kmeans.fit_predict(data[["haversine"]])
-# # big_payload_clusters = data[data["payload"] > 100]
-
-# # small_clusters = (
-# #     big_payload_clusters.groupby("cluster").size().reset_index(name="count")
-# # )
-
-# # small_clusters["subcluster"] = range(1, len(small_clusters) + 1)
-# # big_payload_clusters = big_payload_clusters.merge(
-# #     small_clusters[["cluster", "subcluster"]], on="cluster", how="left"
-# # )
-
-# # big_payload_clusters["cluster"] = big_payload_clusters["subcluster"]
-# # big_payload_clusters = big_payload_clusters.drop("subcluster", axis=1)
-
-# # print(data)
-# import sys
-# from PyQt5.QtWidgets import (
-#     QApplication,
-#     QTableWidget,
-#     QTableWidgetItem,
-#     QWidget,
-#     QVBoxLayout,
-#     QCheckBox,
-# )
-# from PyQt5.QtCore import Qt, pyqtSlot
-
-
-# class MyCheckBoxItem(QCheckBox):
-#     def __init__(self, checked=False):
-#         super().__init__()
-#         self.setChecked(checked)
-#         self.stateChanged.connect(self.check_all)
-
-#     def check_all(self, state):
-#         if state == Qt.Checked:
-#             for checkbox in checkboxes:
-#                 if checkbox != self:
-#                     checkbox.setChecked(True)
-
-
-# class CheckBoxTableWidget(QWidget):
-#     def __init__(self):
-#         super().__init__()
-
-#         self.initUI()
-
-#     def initUI(self):
-#         self.setWindowTitle("Checkbox in QTableWidget Example")
-#         self.setGeometry(100, 100, 400, 300)
-
-#         layout = QVBoxLayout()
-#         self.tableWidget = QTableWidget()
-#         self.tableWidget.setColumnCount(2)
-#         self.tableWidget.setRowCount(3)
-#         self.tableWidget.setHorizontalHeaderLabels(["Column 1", "Column 2"])
-
-#         self.set_all_checked = False  # Biến để kiểm tra
-
-#         global checkboxes  # Sử dụng danh sách để lưu trữ tất cả các checkbox
-
-#         checkboxes = []
-
-#         for row in range(3):
-#             item = QTableWidgetItem()
-#             self.tableWidget.setItem(row, 0, item)
-
-#         for row in range(3):
-#             item = QTableWidgetItem()
-#             self.tableWidget.setItem(row, 1, item)
-
-#         for row in range(3):
-#             checkbox = MyCheckBoxItem(checked=True if self.set_all_checked else False)
-#             checkboxes.append(checkbox)  # Thêm checkbox vào danh sách
-#             self.tableWidget.setCellWidget(row, 0, checkbox)
-
-#         for row in range(3):
-#             checkbox = MyCheckBoxItem(checked=True if self.set_all_checked else False)
-#             checkboxes.append(checkbox)  # Thêm checkbox vào danh sách
-#             self.tableWidget.setCellWidget(row, 1, checkbox)
-
-#         layout.addWidget(self.tableWidget)
-#         self.setLayout(layout)
-
-
-# if __name__ == "__main__":
-#     app = QApplication(sys.argv)
-#     window = CheckBoxTableWidget()
-#     window.show()
-#     sys.exit(app.exec_())
-
-
-# #     check value time start: 2023-10-21 07:00:00
-# # check value data time 2023-10-21 10:51:53.520000
-# from datetime import datetime
-
-# # Tạo hai đối tượng datetime
-# date1 = datetime(2023, 10, 21, 12, 0, 0)
-# date2 = datetime(2023, 10, 20, 10, 30, 0)
-
-# # Trừ hai đối tượng datetime
-# time_difference = date1 - date2
-
-# # In ra kết quả
-# print("Khoảng thời gian giữa date1 và date2 là:", time_difference)
-# data = "98.69 km"
-# print(data[:-2])
+data = [
+    [
+        "MC220509000004",
+        1230700002,
+        0.0,
+        0.0,
+        1.0,
+        10.827673713865051,
+        106.68736148070087,
+    ],
+    ["MC2204030071", 1230700003, 0.0, 0.0, 1.0, 10.844179819400372, 106.67738144346437],
+    [
+        "MC220426000001",
+        1230700004,
+        0.0,
+        0.0,
+        1.0,
+        10.845808014245465,
+        106.65698530399546,
+    ],
+    ["MC2204030078", 1230700005, 0.0, 0.0, 1.0, 10.829913344037724, 106.67070386216511],
+    ["MC2204030077", 1230700006, 0.0, 0.0, 1.0, 10.85541264037055, 106.78993997441134],
+    [
+        "MC220510000001",
+        1230700007,
+        0.0,
+        0.0,
+        1.0,
+        10.86506889143602,
+        106.80371688756779,
+    ],
+    [
+        "MC190703000012",
+        1230700008,
+        0.0,
+        0.0,
+        1.0,
+        10.854527653159472,
+        106.80939995968937,
+    ],
+    [
+        "MC190703000013",
+        1230700009,
+        0.0,
+        0.0,
+        1.0,
+        10.791102482128817,
+        106.70583697964395,
+    ],
+    [
+        "MC190703000014",
+        1230700010,
+        0.0,
+        0.0,
+        1.0,
+        10.791183609986648,
+        106.69825949982476,
+    ],
+    [
+        "MC190703000015",
+        1230700011,
+        0.0,
+        0.0,
+        1.0,
+        10.782966523027511,
+        106.69814911155156,
+    ],
+    [
+        "MC190703000016",
+        1230700012,
+        0.0,
+        0.0,
+        1.0,
+        10.775324727445424,
+        106.68628599389933,
+    ],
+    [
+        "MC190703000017",
+        1230700013,
+        0.0,
+        0.0,
+        1.0,
+        10.76892116200224,
+        106.68502692753195,
+    ],
+]
+start_Point = [10.810174157308571, 106.66492499243704]
+num_Cluster = 3
+name_Algorithm = "Brute Force"
+fun_GetPointTrip(data, num_Cluster)

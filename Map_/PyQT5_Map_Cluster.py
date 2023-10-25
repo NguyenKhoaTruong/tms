@@ -59,7 +59,6 @@ class Show_Map_Cluster:
     ):
         self.show_valueAllPoint(dataPoints)
         data_Center = [list(point) for point in dataCenters]
-        print("check value data center", data_Center, len(data_Center))
         data_Kg = self.show_DataKgM(dataPoints, data_Matrix)
         data_Points_ = np.array(self.data_Point_Clean, dtype=object)
         data_Kg_M3_Drops = np.array(data_Kg, dtype=object)
@@ -140,6 +139,7 @@ class Show_Map_Cluster:
             for value in data:
                 self.all_Points.append([value[0], value[1]])
         return self.all_Points
+
     def haversine_distance(self, coord1, coord2):
         R = 6371  # Bán kính của Trái Đất trong kilômét
         lat1, lon1 = np.radians(list(coord1))
