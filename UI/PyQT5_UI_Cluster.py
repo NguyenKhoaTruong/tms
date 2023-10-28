@@ -354,12 +354,14 @@ class ui_Cluster(QWidget):
         kmeans = KMeans(
             n_clusters=self.num_clusters,
             init="k-means++",
-            n_init=10,
+            n_init=30,
             max_iter=100,
             tol=1e-4,
+            random_state=0,
         )
-        kmeans.fit(self.array_Matrix)
 
+        kmeans.fit(self.array_Matrix)
+        print('checl value data matrix',self.array_Matrix)
         self.labels = kmeans.labels_
         self.centers = kmeans.cluster_centers_
 
