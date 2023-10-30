@@ -115,3 +115,13 @@ erorr build file:
 drone example : https://github.com/wangyeee/MiniGCS
 
 https://github.com/topics/pyqt5-application
+
+
+
+issues:
+    thêm một thuật toán phân cụm.
+    thêm parameter distance vào trong thuật toán kmean. ✅ nhưng thiếu dữ liệu
+    kiểm tra luồng Kmean: ✅
+    Thuật toán k-mean mỗi lần thực hiện thì kết quả kết quả khác nhau  ✅
+    viết tms C# winform: pending.
+    Sửa chức năng compare.
