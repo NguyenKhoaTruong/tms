@@ -14,14 +14,13 @@ from PyQt5.QtWidgets import (
     QGridLayout,
 )
 from PyQt5.QtCore import QTime
-
+from Cluster.Main_Cluster import Main_Clustering
 from Process_Data.PyQT5_TSP import use_TSP
 from Process_Data.PyQT5_TSP_Cluster import use_TSP_Cluster
 from Map_.PyQT5_Map_Cluster import Show_Map_Cluster
 from UI.PyQT5_Dialog_Location import InputDialog
 from UI.PyQT5_LoadingData import LoadingGif
 from UI.PyQT5_Dialog_Compare import DialogCompare
-import UI.css_UI as css
 from PyQt5.QtCore import QFile, QTextStream
 from Map_.PyQT5_Map import ShowMapCluster
 from sklearn.cluster import KMeans
@@ -34,6 +33,7 @@ from PyQt5.QtCore import Qt
 import numpy as np
 import requests
 import os
+import UI.css_UI as css
 
 
 class ui_Cluster(QWidget):
@@ -47,6 +47,7 @@ class ui_Cluster(QWidget):
         self.start_Point = False
         self.data_Cluster = dataOrder
         self.num_clusters = num_Cluster
+        self.data_Map = ""
         self.selected_cluster = []
         self.data_Point = []
         self.data_Center = []
@@ -92,6 +93,7 @@ class ui_Cluster(QWidget):
         self.cbStart.setFixedWidth(200)
         # Sửa
         self.cbTSP = QComboBox()
+        self.cbTSP.setFixedWidth(180)
         self.cbTSP.addItem("Nearest Neighbor")
         self.cbTSP.addItem("Randomized Tour")
         # self.cbTSP.addItem("Brute Force")
@@ -105,6 +107,12 @@ class ui_Cluster(QWidget):
         self.cbTSP.addItem("Ant Colony")
         self.cbTSP.addItem("Christofides")
 
+        self.cbAlgorithmsCluster = QComboBox()
+        self.cbAlgorithmsCluster.setFixedWidth(180)
+        self.cbAlgorithmsCluster.addItem("Gausian Mixture")
+        self.cbAlgorithmsCluster.addItem("Mean Shift")
+        self.cbAlgorithmsCluster.addItem("Mini Batch K Mean")
+        self.cbAlgorithmsCluster.addItem("K_Means")
         self.cbCluster = QComboBox()
         self.cbCluster.setFixedWidth(180)
 
@@ -123,6 +131,11 @@ class ui_Cluster(QWidget):
         label_ServiceTime = QLabel("Service Time:")
         label_WATime = QLabel("Waiting After Time:")
         label_CTime = QLabel("Congestion Time(0 -> 1 %):")
+        label_Cluster = QLabel("Cluster:")
+
+        self.btn_ShowCluster = QPushButton("Show Map")
+        self.btn_ShowCluster.clicked.connect(self.show_DataMapCluster)
+        self.btn_ShowCluster.setFixedHeight(30)
 
         self.btn_Back = QPushButton("Back")
         self.btn_Back.setFixedHeight(30)
@@ -174,7 +187,7 @@ class ui_Cluster(QWidget):
         self.layout_InCluster.addWidget(label_TSP)
         self.layout_InCluster.addSpacing(85)
         self.layout_InCluster.addWidget(self.cbTSP)
-        self.layout_InCluster.addSpacing(170)
+        self.layout_InCluster.addSpacing(130)
         self.layout_InCluster.addWidget(self.label_Order)
         self.layout_InCluster.addSpacing(10)
         self.layout_InCluster.addWidget(self.cbCluster)
@@ -190,10 +203,11 @@ class ui_Cluster(QWidget):
         self.layout_OpCluster.addWidget(label_WBTime)
         self.layout_OpCluster.addSpacing(50)
         self.layout_OpCluster.addWidget(self.input_WBTime)
-        self.layout_OpCluster.addSpacing(150)
+        self.layout_OpCluster.addSpacing(120)
         self.layout_OpCluster.addWidget(label_ServiceTime)
         self.layout_OpCluster.addWidget(self.input_SETime)
         self.layout_OpCluster.addStretch(1)
+        self.layout_OpCluster.addWidget(self.btn_ShowCluster)
         self.layout_OpCluster.addWidget(self.modeReturn)
         self.layout_OpCluster.addWidget(self.modeStartPoint)
 
@@ -202,7 +216,11 @@ class ui_Cluster(QWidget):
         self.content_Input.addSpacing(160)
         self.content_Input.addWidget(label_CTime)
         self.content_Input.addWidget(self.input_CTime)
-        self.content_Input.addSpacing(170)
+        self.content_Input.addSpacing(120)
+        self.content_Input.addWidget(label_Cluster)
+        self.content_Input.addSpacing(50)
+        self.content_Input.addWidget(self.cbAlgorithmsCluster)
+        # self.content_Input.addSpacing(150)
         self.content_Input.addStretch(1)
         self.content_Input.addWidget(self.btn_Compare)
         self.content_Input.addWidget(self.btn_Back)
@@ -361,7 +379,6 @@ class ui_Cluster(QWidget):
         )
 
         kmeans.fit(self.array_Matrix)
-        print('checl value data matrix',self.array_Matrix)
         self.labels = kmeans.labels_
         self.centers = kmeans.cluster_centers_
 
@@ -469,9 +486,7 @@ class ui_Cluster(QWidget):
     def show_Input_Data_TSP(self):  # dữ liệu hiển thị không cần phân cụm
         data_ = [[item[5], item[6]] for item in self.data_Cluster]
         converted_data = [[float(item) for item in sublist] for sublist in data_]
-        self.array_Point = list(
-            set(map(tuple, converted_data))
-        )  # loại bỏ các phần tử trùng trong mảng:
+        self.array_Point = list(set(map(tuple, converted_data)))
         self.array_Point = [list(item) for item in self.array_Point]
         for value in self.array_Point:
             self.cbOrigin.addItem("{},{}".format(value[0], value[1]))
@@ -490,11 +505,30 @@ class ui_Cluster(QWidget):
             self.data_array,
             self.cbCluster,
             self.cbStart,
+            self.data_Map,
         )
 
     def fun_Compare(self):
         input_dialog = DialogCompare(self)
         input_dialog.exec_()
+
+    def show_DataMapCluster(self):
+        text_Selected = self.cbAlgorithmsCluster.currentText()
+        data = np.array(
+            [
+                [
+                    float(item[5]),
+                    float(item[6]),
+                ]
+                for item in self.data_array
+            ]
+        )
+        map_View = Main_Clustering().show_DataHTML(
+            text_Selected, data, self.num_clusters
+        )
+        self.data_Map = map_View
+        self.show_Map_Cluster()
+        return self.data_Map
 
     def fun_Back(self):
         if self.layout_UB.count() >= 1:

@@ -1,5 +1,50 @@
 import numpy as np
 from sklearn.cluster import AffinityPropagation
+import matplotlib.pyplot as plt
+
+
+class AfinityPropagation:
+    def __init__(self):
+        print("AffinityPropagation")
+
+    def convent_Point(self, data, labels, lenght):
+        point = []
+        for i in range(int(lenght)):
+            print("check value data i", i)
+            # cluster_points = data[labels == i]
+            # point.append(cluster_points)
+        return point
+
+    def show_Map(self, data):
+        data_array = np.array(data)
+        af = AffinityPropagation().fit(data_array)
+        cluster_centers_indices = af.cluster_centers_indices_
+        data_Center = af.cluster_centers_
+        labels = af.labels_
+        print(
+            "check value data center", data_Center, len(data_Center), type(data_Center)
+        )
+        print("check value data center", labels, len(labels))
+        data_Point = self.convent_Point(data, labels, len(data_Center))
+        # return data_Point
+
+    def show_Char(self, data_array, cluster_centers_indices, labels):
+        plt.figure(figsize=(12, 8))
+        plt.scatter(data_array[:, 1], data_array[:, 0], c=labels, cmap="viridis")
+        plt.scatter(
+            data_array[cluster_centers_indices, 1],
+            data_array[cluster_centers_indices, 0],
+            marker="o",
+            s=300,
+            c="red",
+            label="Centers",
+        )
+        plt.xlabel("Longitude")
+        plt.ylabel("Latitude")
+        plt.title("Affinity Propagation Clustering")
+        plt.legend()
+        plt.show()
+
 
 data = [
     [10.79873893, 106.58475074],
@@ -96,31 +141,4 @@ data = [
     [10.79737064, 106.62031109],
     [10.77849039, 106.66544494],
 ]
-
-# Chuyển dữ liệu từ danh sách sang mảng NumPy
-data_array = np.array(data)
-
-# Tính toán các điểm tiêu biểu với Affinity Propagation
-af = AffinityPropagation().fit(data_array)
-
-# Lấy các điểm tiêu biểu và nhãn cụm tương ứng
-cluster_centers_indices = af.cluster_centers_indices_
-labels = af.labels_
-import matplotlib.pyplot as plt
-
-# Hiển thị kết quả lên Matplotlib
-plt.figure(figsize=(12, 8))
-plt.scatter(data_array[:, 1], data_array[:, 0], c=labels, cmap="viridis")
-plt.scatter(
-    data_array[cluster_centers_indices, 1],
-    data_array[cluster_centers_indices, 0],
-    marker="o",
-    s=300,
-    c="red",
-    label="Centers",
-)
-plt.xlabel("Longitude")
-plt.ylabel("Latitude")
-plt.title("Affinity Propagation Clustering")
-plt.legend()
-plt.show()
+AfinityPropagation().show_Map(data)

@@ -102,7 +102,7 @@ data = np.array(
 )
 
 # Số lượng cụm bạn muốn phân chia dữ liệu thành
-n_clusters = 7
+n_clusters = 2
 
 # Tính toán ma trận tương đồng
 cntr, u, u0, d, jm, p, fpc = fuzz.cluster.cmeans(

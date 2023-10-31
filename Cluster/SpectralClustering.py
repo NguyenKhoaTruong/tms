@@ -1,8 +1,32 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.cluster import SpectralClustering
+from dotenv import load_dotenv
+import os
 
-# Tạo dữ liệu ví dụ (lat lon) - bạn cần thay thế dữ liệu này bằng dữ liệu thực tế của bạn
+
+class Spectral:
+    def __init__(self):
+        load_dotenv()
+        self.api_Key = os.getenv("API_KEY")
+        print("Spectral Clustering")
+
+    def show_Map(self, data):
+        n_clusters = 10
+        spectral_clustering = SpectralClustering(
+            n_clusters=n_clusters, affinity="nearest_neighbors"
+        )
+        labels = spectral_clustering.fit_predict(data)
+        self.show_HTML(labels)
+
+    def show_HTML(self, labels):
+        plt.scatter(data[:, 1], data[:, 0], c=labels, cmap="rainbow")
+        plt.xlabel("Longitude")
+        plt.ylabel("Latitude")
+        plt.title("Spectral Clustering Results")
+        plt.show()
+
+
 data = np.array(
     [
         [10.79873893, 106.58475074],
@@ -100,19 +124,4 @@ data = np.array(
         [10.77849039, 106.66544494],
     ]
 )
-
-# Số lượng cụm bạn muốn phân chia
-n_clusters = 15
-
-# Thực hiện Spectral Clustering
-spectral_clustering = SpectralClustering(
-    n_clusters=n_clusters, affinity="nearest_neighbors"
-)
-labels = spectral_clustering.fit_predict(data)
-
-# Hiển thị kết quả bằng cách trực quan hóa
-plt.scatter(data[:, 1], data[:, 0], c=labels, cmap="rainbow")
-plt.xlabel("Longitude")
-plt.ylabel("Latitude")
-plt.title("Spectral Clustering Results")
-plt.show()
+Spectral().show_Map(data)

@@ -2,7 +2,62 @@ import numpy as np
 from sklearn.cluster import DBSCAN
 import matplotlib.pyplot as plt
 
-# Dữ liệu lat lon
+
+class DBSCANS:
+    def __init__(self):
+        print("DBSCAN")
+
+    def show_Map(self, data):
+        data = np.array(data)
+        epsilon = 0.1
+        min_samples = 2
+        dbscan = DBSCAN(
+            eps=epsilon,
+            min_samples=min_samples,
+        )
+        labels = dbscan.fit_predict(data)
+        core_samples_mask = np.zeros_like(labels, dtype=bool)
+        core_samples_mask[dbscan.core_sample_indices_] = True
+        unique_labels = set(labels)
+        self.show_Char(unique_labels, labels, core_samples_mask, min_samples, epsilon)
+
+    def show_Char(self, unique_labels, labels, core_samples_mask, min_samples, epsilon):
+        colors = [
+            plt.cm.Spectral(each) for each in np.linspace(0, 1, len(unique_labels))
+        ]
+        plt.figure(figsize=(8, 6))
+        for k, col in zip(unique_labels, colors):
+            if k == -1:
+                col = [0, 0, 0, 1]
+
+            class_member_mask = labels == k
+
+            xy = data[class_member_mask & core_samples_mask]
+            plt.plot(
+                xy[:, 1],
+                xy[:, 0],
+                "o",
+                markerfacecolor=tuple(col),
+                markeredgecolor="k",
+                markersize=14,
+            )
+
+            xy = data[class_member_mask & ~core_samples_mask]
+            plt.plot(
+                xy[:, 1],
+                xy[:, 0],
+                "o",
+                markerfacecolor=tuple(col),
+                markeredgecolor="k",
+                markersize=6,
+            )
+
+        plt.title(f"DBSCAN Clustering (epsilon={epsilon}, min_samples={min_samples})")
+        plt.xlabel("Longitude")
+        plt.ylabel("Latitude")
+        plt.show()
+
+
 data = [
     [10.79873893, 106.58475074],
     [10.76494905, 106.63425263],
@@ -98,55 +153,4 @@ data = [
     [10.79737064, 106.62031109],
     [10.77849039, 106.66544494],
 ]
-
-# Chuyển danh sách dữ liệu thành mảng NumPy
-data = np.array(data)
-# Áp dụng thuật toán DBSCAN
-epsilon = 0.1  # Điều chỉnh giá trị epsilon theo nhu cầu
-min_samples = 2  # Điều chỉnh số lượng điểm tối thiểu trong một cụm
-dbscan = DBSCAN(
-    eps=epsilon,
-    min_samples=min_samples,
-)
-labels = dbscan.fit_predict(data)
-
-# Hiển thị kết quả bằng biểu đồ
-core_samples_mask = np.zeros_like(labels, dtype=bool)
-core_samples_mask[dbscan.core_sample_indices_] = True
-
-# Chuẩn bị các màu sắc cho từng cụm
-unique_labels = set(labels)
-colors = [plt.cm.Spectral(each) for each in np.linspace(0, 1, len(unique_labels))]
-
-# Vẽ kết quả
-plt.figure(figsize=(8, 6))
-for k, col in zip(unique_labels, colors):
-    if k == -1:
-        col = [0, 0, 0, 1]  # Màu đen cho nhiễu
-
-    class_member_mask = labels == k
-
-    xy = data[class_member_mask & core_samples_mask]
-    plt.plot(
-        xy[:, 1],
-        xy[:, 0],
-        "o",
-        markerfacecolor=tuple(col),
-        markeredgecolor="k",
-        markersize=14,
-    )
-
-    xy = data[class_member_mask & ~core_samples_mask]
-    plt.plot(
-        xy[:, 1],
-        xy[:, 0],
-        "o",
-        markerfacecolor=tuple(col),
-        markeredgecolor="k",
-        markersize=6,
-    )
-
-plt.title(f"DBSCAN Clustering (epsilon={epsilon}, min_samples={min_samples})")
-plt.xlabel("Longitude")
-plt.ylabel("Latitude")
-plt.show()
+DBSCANS().show_Map(data)

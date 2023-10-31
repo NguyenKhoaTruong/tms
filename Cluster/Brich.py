@@ -2,7 +2,31 @@ import numpy as np
 from sklearn.cluster import Birch
 import matplotlib.pyplot as plt
 
-# Đây là danh sách các điểm lat, lon. Hãy thay thế dữ liệu này bằng dữ liệu thực tế của bạn.
+
+class Brich:
+    def __init__(self):
+        print("Brich")
+
+    def show_Map(data):
+        birch = Birch(threshold=1.0, n_clusters=5)
+        birch.fit(data)
+        labels = birch.labels_
+        colors = ["b", "g", "r", "c", "m", "y", "k"]
+        for cluster_label in np.unique(labels):
+            cluster_points = data[labels == cluster_label]
+            plt.scatter(
+                cluster_points[:, 1],
+                cluster_points[:, 0],
+                c=colors[cluster_label % len(colors)],
+                label=f"Cluster {cluster_label}",
+            )
+        plt.title("Phân cụm dữ liệu sử dụng BIRCH")
+        plt.xlabel("Longitude (lon)")
+        plt.ylabel("Latitude (lat)")
+        plt.legend()
+        plt.show()
+
+
 data = np.array(
     [
         [10.79873893, 106.58475074],
@@ -100,29 +124,4 @@ data = np.array(
         [10.77849039, 106.66544494],
     ]
 )
-
-# Khởi tạo mô hình BIRCH và phân cụm dữ liệu
-birch = Birch(
-    threshold=1.0, n_clusters=5
-)  # Thiết lập ngưỡng và số lượng phân cụm mong muốn
-birch.fit(data)
-
-# Lấy nhãn phân cụm của từng điểm dữ liệu
-labels = birch.labels_
-
-# Hiển thị kết quả bằng cách vẽ các điểm với màu sắc khác nhau cho từng phân cụm
-colors = ["b", "g", "r", "c", "m", "y", "k"]
-for cluster_label in np.unique(labels):
-    cluster_points = data[labels == cluster_label]
-    plt.scatter(
-        cluster_points[:, 1],
-        cluster_points[:, 0],
-        c=colors[cluster_label % len(colors)],
-        label=f"Cluster {cluster_label}",
-    )
-
-plt.title("Phân cụm dữ liệu sử dụng BIRCH")
-plt.xlabel("Longitude (lon)")
-plt.ylabel("Latitude (lat)")
-plt.legend()
-plt.show()
+Brich.show_Map(data)

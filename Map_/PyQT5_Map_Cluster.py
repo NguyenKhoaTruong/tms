@@ -21,16 +21,14 @@ class Show_Map_Cluster:
         dataPoints,
         dataLayout,
         layout_Function,
-        # btn_compare,
         cb_TSP,
         on,
         off,
         data_Matrix,
         cb_cluster,
         cb_Start,
+        data_Map,
     ):
-        # cb_cluster.setCurrentIndex(0)
-        # cb_Start.setCurrentIndex(0)
         load_dotenv()
         self.api_Key = os.getenv("API_KEY")
         self.web_view = QWebEngineView()
@@ -44,18 +42,19 @@ class Show_Map_Cluster:
         self.click_count = 0
         # self.change_Compare(layout_Function, dataCenters)
         self.show_Map_HTML(
-            dataCenters, dataPoints, dataLayout, cb_TSP, on, off, data_Matrix
+            dataCenters, dataPoints, dataLayout, cb_TSP, on, off, data_Matrix, data_Map
         )
 
-    # def change_Compare(self, layout_Function, dataCenters):
-    #     if len(dataCenters) > 10:
-    #         btn_compare.hide()
-    #     else:
-    #         # layout_Function.addWidget(btn_compare, 0, 7)
-    #         btn_compare.hide()
-
     def show_Map_HTML(
-        self, dataCenters, dataPoints, dataLayout, cb_TSP, on, off, data_Matrix
+        self,
+        dataCenters,
+        dataPoints,
+        dataLayout,
+        cb_TSP,
+        on,
+        off,
+        data_Matrix,
+        data_Map,
     ):
         self.show_valueAllPoint(dataPoints)
         data_Center = [list(point) for point in dataCenters]
@@ -74,6 +73,7 @@ class Show_Map_Cluster:
             nearest_Neighbor,
             dataCenters,
             dataLayout,
+            data_Map,
         )
 
         def show_Data_():
@@ -106,8 +106,6 @@ class Show_Map_Cluster:
                 show_Data_()
             else:
                 show_Data_Cluster_Main()
-
-        # btn_compare.clicked.connect(on_Change_LayOut)
 
     def show_DataKgM(self, dataPoints, data_Matrix):
         data_Kg = []
@@ -175,19 +173,6 @@ class Show_Map_Cluster:
             print("Check Log Error Distance", e)
         return self.distance_Matrix
 
-    # def use_BruteForce(self, distance_matrix, data_point, on, off):
-    #     try:
-    #         data = []
-    #         for point, distance in zip(data_point, distance_matrix):
-    #             route, distance_bf = Randomized_Tour_Cluster.randomized_tour(
-    #                 distance, 0, on, off
-    #             )
-    #             print("check value data distance_bf", route)
-    #             data.append(distance_bf)
-    #         return data
-    #     except ValueError as e:
-    #         print("Check Log Error", e)
-
     def show_Tree_Trip(self, data_point, distances, data_Center):
         list_Option = ""
         for index, value in enumerate(data_point):
@@ -221,6 +206,14 @@ class Show_Map_Cluster:
                 seen_coordinates.add(coordinates)
         return data_Clean
 
+    def remove_layout(self, dataLayout):
+        item = dataLayout.itemAt(0)
+        if item:
+            widget_to_delete = item.widget()
+            if widget_to_delete:
+                dataLayout.removeWidget(widget_to_delete)
+                widget_to_delete.deleteLater()
+
     def show_HTMLContent(
         self,
         data_Center,
@@ -229,6 +222,7 @@ class Show_Map_Cluster:
         distances_html,
         dataCenters,
         dataLayout,
+        data_Map,
     ):
         html_content = f"""
         <!DOCTYPE html>
@@ -302,5 +296,10 @@ class Show_Map_Cluster:
                 </body>
             </html>
             """
-        self.web_view.setHtml(html_content)
+
+        if len(data_Map) > 4:
+            self.web_view.setHtml(data_Map)
+            self.remove_layout(dataLayout)
+        else:
+            self.web_view.setHtml(html_content)
         dataLayout.addWidget(self.web_view)
