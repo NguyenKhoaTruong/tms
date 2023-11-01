@@ -119,13 +119,21 @@ https://github.com/topics/pyqt5-application
 
 
 issues:
-    thêm một thuật toán phân cụm.✅
     thêm parameter distance vào trong thuật toán kmean. ✅ nhưng thiếu dữ liệu
-    kiểm tra luồng Kmean: ✅
-    Thuật toán k-mean mỗi lần thực hiện thì kết quả kết quả khác nhau  ✅
     viết tms C# winform: pending.
     Sửa chức năng compare: pending.
 
-31/10/2023:
-    data center,data radius,all point.
-    show Map Ui 
+
+K-Mean tùy chỉnh:
+    thực hiện kmean cho nhiều dữ liệu: gộp biến đúng điều kiện + xử lý điều kiện sai
+
+
+sử dụng một thuật toán:
+    -làm cách nào để biết số lần lặp nào là tốt nhất không set randome state: khi sử dụng kmean
+    - Số cụm bao nhiêu là tốt nhất.
+    - Tại sao mỗi trip lại không có những điểm cố định.
+    - tham khảo các parameter chi tiết
+sử dụng nhiều thuật toán dựa trên cái gì để biết nên chọn cái nào. cái nào tốt hơn.
+
+
+

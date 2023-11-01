@@ -21,15 +21,18 @@ class Kmean_:
                 great_circle(data[j], kmeans.cluster_centers_[labels[j]]).kilometers
                 for j in range(len(data))
             ]
-            new_data = []
-
+            fit_Data = []
+            new_Data = []
             for j in range(len(data)):
                 if distances_km[j] <= threshold_distance_km:
-                    new_data.append(data[j])
-            if len(new_data) < len(data):
-                kmeans = KMeans(n_clusters=10, random_state=0)
-                data = new_data
-            elif len(new_data) == len(data):
+                    fit_Data.append(data[j])
+                else:
+                    new_Data.append(data[j])
+            if len(fit_Data) < len(data):
+                kmeans = KMeans(n_clusters=num_Cluster, random_state=0)
+                data = fit_Data
+                print("K MEAN Ở ĐÂY")
+            elif len(fit_Data) == len(data):
                 print("Đang xử lý")
             else:
                 print("Đang xử lý")

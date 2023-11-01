@@ -133,7 +133,7 @@ class ui_Cluster(QWidget):
         label_CTime = QLabel("Congestion Time(0 -> 1 %):")
         label_Cluster = QLabel("Cluster:")
 
-        self.btn_ShowCluster = QPushButton("Show Map")
+        self.btn_ShowCluster = QPushButton("View Map")
         self.btn_ShowCluster.clicked.connect(self.show_DataMapCluster)
         self.btn_ShowCluster.setFixedHeight(30)
 

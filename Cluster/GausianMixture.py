@@ -7,9 +7,9 @@ class Gausian:
     def __init__(self):
         print("Gausian Mixture")
 
-    def convent_Point(self, data, labels):
+    def convent_Point(self, data, labels, cluster):
         point = []
-        for i in range(int(10)):
+        for i in range(cluster):
             cluster_points = data[labels == i]
             point.append(cluster_points)
         return point
@@ -19,7 +19,7 @@ class Gausian:
         gmm.fit(data)
         labels = gmm.predict(data)
         means = gmm.means_
-        data_Point = self.convent_Point(data, labels)
+        data_Point = self.convent_Point(data, labels, cluster)
         data_Center = [[items[0], items[1]] for items in means]
         return data_Center, data_Point
 
