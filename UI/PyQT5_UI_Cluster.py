@@ -17,6 +17,7 @@ from PyQt5.QtCore import QTime
 from Cluster.Main_Cluster import Main_Clustering
 from Process_Data.PyQT5_TSP import use_TSP
 from Process_Data.PyQT5_TSP_Cluster import use_TSP_Cluster
+from Cluster.Compare_Accuracy import CompareAccuracy
 from Map_.PyQT5_Map_Cluster import Show_Map_Cluster
 from UI.PyQT5_Dialog_Location import InputDialog
 from UI.PyQT5_LoadingData import LoadingGif
@@ -87,6 +88,9 @@ class ui_Cluster(QWidget):
         self.btnOffMode.clicked.connect(self.get_Off_Return)
         self.update_Status_Mode(self.btnOffMode, self.off_Return)
 
+        self.btn_CompareCluster = QPushButton("Compare Cluster")
+        self.btn_CompareCluster.setFixedHeight(30)
+        self.btn_CompareCluster.clicked.connect(self.compare_Accuracy_Algorithms)
         self.cbOrigin = QComboBox()
 
         self.cbStart = QComboBox()
@@ -222,6 +226,7 @@ class ui_Cluster(QWidget):
         self.content_Input.addWidget(self.cbAlgorithmsCluster)
         # self.content_Input.addSpacing(150)
         self.content_Input.addStretch(1)
+        self.content_Input.addWidget(self.btn_CompareCluster)
         self.content_Input.addWidget(self.btn_Compare)
         self.content_Input.addWidget(self.btn_Back)
 
@@ -549,6 +554,18 @@ class ui_Cluster(QWidget):
         if self.off_Return:
             self.on_Return = False
             self.update_Status_Mode(self.btnOnMode, self.on_Return)
+
+    def compare_Accuracy_Algorithms(self):
+        data = np.array(
+            [
+                [
+                    float(item[5]),
+                    float(item[6]),
+                ]
+                for item in self.data_array
+            ]
+        )
+        CompareAccuracy().show_Accuracy(data, self.num_clusters)
 
     def update_Status_Mode(self, button, is_active):
         color = "#4CAF50" if is_active else "white"
