@@ -1,4 +1,6 @@
 from sklearn.cluster import KMeans, MiniBatchKMeans
+from sklearn.mixture import GaussianMixture
+from sklearn.metrics import silhouette_score
 import matplotlib.pyplot as plt
 import numpy as np
 import time
@@ -7,69 +9,117 @@ import time
 class CompareAccuracy:
     def __init__(self):
         print("Compare Accuracy")
+        self.num_Clutered = [10, 15, 20, 25, 30]
+        self.n_Iterations = [200, 400, 600, 800, 1000]
+        self.random_State = self.n_Iterations.copy()
 
-    def show_Accuracy(self, data, num_Cluter):
-        num_Clutered = [10, 20, 30, 40, 50]
-        n_Iterations = [200, 400, 600, 800, 1000]
-        random_State = n_Iterations.copy()
+    def show_Accuracy(self, data):
         # Timer
-        kmeans, miniKmean = self.compare_Accuracy(
-            data, num_Clutered, n_Iterations, random_State
+        self.compare_Accuracy(
+            data, self.num_Clutered, self.n_Iterations, self.random_State
         )
-        # Show char
-        self.char_Kmean(data, kmeans)
-        self.char_MiniBatchKmean()
 
     def compare_Accuracy(self, data, cluster, num_Iterations, state):
         timer_Kmean = []
         time_MiniKmean = []
 
         def cal_Time():
-            for index, items in enumerate(cluster):
-                start_time = time.time()
-                tKmean, path_Kmeans = self.cal_Kmean(
-                    cluster[index],
-                    num_Iterations[index],
-                    state[index],
-                    data,
-                    start_time,
-                )
-                timer_Kmean.insert(0, path_Kmeans)
-                timer_Kmean.append(tKmean)
-                # Mini Batch K-mean
-                tMiniKmean, path_MiniKmean = self.cal_MiniBatchKmean(
-                    cluster[index],
-                    num_Iterations[index],
-                    state[index],
-                    data,
-                    start_time,
-                )
-                time_MiniKmean.insert(0, path_MiniKmean)
-                time_MiniKmean.append(tMiniKmean)
+            plt.figure(figsize=(15, 12))
+            self.cal_Kmean(data, cluster, num_Iterations, state)
+            self.cal_MiniBatchKmean(data, cluster, num_Iterations, state)
+            # self.cal_GausianMixture(data, cluster, num_Iterations, state)
+            plt.tight_layout()
+            plt.show()
             return timer_Kmean, time_MiniKmean
 
         cal_Time()
         return timer_Kmean, time_MiniKmean
 
-    def cal_Kmean(self, cluster, iter, state, data, start_time):
-        kmeans = KMeans(
-            n_clusters=cluster,
-            max_iter=iter,
-            random_state=state,
-        )
-        kmeans.fit(data)
-        kmeans_time = time.time() - start_time
-        return kmeans_time, kmeans
+    def cal_Kmean(self, data, cluster, num_Iterations, state):
+        for i, items in enumerate(cluster):
+            start_time = time.time()
+            kmeans = KMeans(
+                n_clusters=cluster[i],
+                max_iter=num_Iterations[i],
+                random_state=state[i],
+            )
+            kmeans.fit(data)
+            kmeans_time = time.time() - start_time
+            silhouette_ScoreKmean = silhouette_score(
+                data, kmeans.labels_
+            )  # Silhouette Score
+            # Paint Chart
+            plt.subplot(len(self.num_Clutered), 2, i * 2 + 1)
+            plt.scatter(data[:, 0], data[:, 1], c=kmeans.labels_, cmap="viridis")
+            plt.scatter(
+                kmeans.cluster_centers_[:, 0],
+                kmeans.cluster_centers_[:, 1],
+                marker="x",
+                s=200,
+                linewidths=3,
+                color="r",
+            )
+            plt.title(
+                f"K-means: Clusters: {cluster[i]}, Iterations: {num_Iterations[i]},Time: {kmeans_time:.2f} seconds\nSilhouette Score:{silhouette_ScoreKmean:.2f},Inertia:{kmeans.inertia_:.2f}"
+            )
 
-    def cal_MiniBatchKmean(self, cluster, iter, state, data, start_time):
-        minibatch_kmeans = MiniBatchKMeans(
-            n_clusters=cluster,
-            max_iter=iter,
-            random_state=state,
-        )
-        minibatch_kmeans.fit(data)
-        minibatch_kmeans_time = time.time() - start_time
-        return minibatch_kmeans_time, minibatch_kmeans
+    def cal_MiniBatchKmean(self, data, cluster, num_Iterations, state):
+        for i, items in enumerate(cluster):
+            start_time = time.time()
+            minibatch_kmeans = MiniBatchKMeans(
+                n_clusters=cluster[i],
+                max_iter=num_Iterations[i],
+                random_state=state[i],
+            )
+            minibatch_kmeans.fit(data)
+            minibatch_kmeans_time = time.time() - start_time
+            silhouette_ScoreMiniKmean = silhouette_score(
+                data, minibatch_kmeans.labels_
+            )  # Silhouette Score
+            plt.subplot(len(self.num_Clutered), 2, i * 2 + 2)
+            plt.scatter(
+                data[:, 0], data[:, 1], c=minibatch_kmeans.labels_, cmap="viridis"
+            )
+            plt.scatter(
+                minibatch_kmeans.cluster_centers_[:, 0],
+                minibatch_kmeans.cluster_centers_[:, 1],
+                marker="x",
+                s=200,
+                linewidths=3,
+                color="r",
+            )
+            plt.title(
+                f"Mini Batch K-means: Clusters: {cluster[i]}, Iterations: {num_Iterations[i]},Time: {minibatch_kmeans_time:.2f} seconds\n Silhouette Score:{silhouette_ScoreMiniKmean:.2f},Inertia:{minibatch_kmeans.inertia_:.2f}"
+            )
+
+    def cal_GausianMixture(self, data, cluster, num_Iterations, state):
+        for i, items in enumerate(cluster):
+            start_time = time.time()
+            gmm = GaussianMixture(
+                n_components=cluster[i],
+                random_state=state[i],
+                max_iter=num_Iterations[i],
+            )
+            gmm.fit(data)
+            labels = gmm.predict(data)
+            means = gmm.means_
+            gausian_MixtureTime = time.time() - start_time
+            silhouette_ScoreMiniKmean = silhouette_score(
+                data, labels
+            )  # Silhouette Score
+            plt.subplot(len(self.num_Clutered), 2, i * 2 + 1)
+            plt.scatter(data[:, 0], data[:, 1], c=labels, cmap="viridis")
+            plt.scatter(
+                means[:, 0],
+                means[:, 1],
+                marker="x",
+                s=200,
+                linewidths=3,
+                color="r",
+            )
+            plt.title(
+                f"Gaussian Mixture: Clusters: {cluster[i]}, Iterations: {num_Iterations[i]},Time: {gausian_MixtureTime:.2f} seconds\n Silhouette Score:{silhouette_ScoreMiniKmean:.2f}"
+            )
 
     def char_Kmean(self, data, timer):
         time = timer[:4]

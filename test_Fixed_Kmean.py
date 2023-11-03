@@ -351,7 +351,7 @@ import time
 
 # Tạo tập dữ liệu mô phỏng
 np.random.seed(0)
-X = np.random.randn(500, 2)
+X = np.random.randn(5000, 2)
 
 # Số lượng cụm và số lần lặp được thay thế
 num_Clutered = [10, 20, 30, 40, 50]

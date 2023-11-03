@@ -21,6 +21,7 @@ class Gausian:
         means = gmm.means_
         data_Point = self.convent_Point(data, labels, cluster)
         data_Center = [[items[0], items[1]] for items in means]
+
         return data_Center, data_Point
 
     def show_Char(self, data, labels, means):

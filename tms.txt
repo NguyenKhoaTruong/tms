@@ -153,11 +153,17 @@ Viết pro so sánh các thuật toán phân cụm:
 
     - Thuật toán nào phù hợp với dũ liệu lớn or dữ liệu nhỏ:dựa trên thời gian trả về kết quả.
 
-    - Khẳ năng xử lý dữ liệu lớn: sự khác biệt là vị trí trung tâm của các cụm. đánh giá hiệu suất cảu thuật toán: thông qua Inertia or silhouette Score: mục đích: đo khoảng cách giữa tâm cụm và các điểm trong cụm
+    3/11 - Khẳ năng xử lý dữ liệu lớn: sự khác biệt là vị trí trung tâm của các cụm. đánh giá hiệu suất cảu thuật toán: thông qua Inertia or silhouette Score: mục đích: đo khoảng cách giữa tâm cụm và các điểm trong cụm
     
     
-    - tính tiêu tốn tài nguyên: ram cpu .. được tính theo thời gian.
-    
+    3/11 - tính tiêu tốn tài nguyên: ram cpu .. được tính theo thời gian.
+
+    Silhouette Score là một phép đo đánh giá chất lượng phân cụm dựa trên khoảng cách giữa các cụm và khoảng cách giữa các điểm dữ liệu trong cùng một cụm. Giá trị Silhouette Score càng cao thì phân cụm càng tốt.
+    Inertia là một phép đo được sử dụng để đánh giá mức độ gom cụm trong dữ liệu. Inertia đo khoảng cách trung bình giữa các điểm dữ liệu và tâm cụm gần nhất của chúng. Giá trị Inertia càng nhỏ thì mức độ gom cụm càng tốt.
+    thêm 1 tt so sánh trong biểu đồ
+
+   6/11: thiếu vẽ hình hiển thị cho 3 thuật toán.: thuật toán gausianMixture thiếu giá trị Inertia - thay thế bằng thông số khác.
+   
     
 
 
