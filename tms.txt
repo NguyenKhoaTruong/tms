@@ -163,6 +163,12 @@ Viết pro so sánh các thuật toán phân cụm:
     thêm 1 tt so sánh trong biểu đồ
 
    6/11: thiếu vẽ hình hiển thị cho 3 thuật toán.: thuật toán gausianMixture thiếu giá trị Inertia - thay thế bằng thông số khác.
+
+
+truyền parameter distance cho thuật toán k-mean:
+    - giá trị không phù hợp sau khi lặp có num_cluster=? và data=?.
+    - Lặp cho đến khi giá trị không còn phù hợp nữa.
+    
    
     
 

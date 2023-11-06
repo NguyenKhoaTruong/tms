@@ -23,16 +23,33 @@ class CompareAccuracy:
         timer_Kmean = []
         time_MiniKmean = []
 
-        def cal_Time():
-            plt.figure(figsize=(15, 12))
-            self.cal_Kmean(data, cluster, num_Iterations, state)
-            self.cal_MiniBatchKmean(data, cluster, num_Iterations, state)
-            # self.cal_GausianMixture(data, cluster, num_Iterations, state)
+        def show_ImgCompare(name_Compare):
+            position = [1, 2]
+            # Show Image Compare Algorithms
+            plt.figure(figsize=(19, 12))
+            if name_Compare == "Kmean_MiniBatchKmean":
+                self.cal_Kmean(data, cluster, num_Iterations, state)
+                self.cal_MiniBatchKmean(
+                    data, cluster, num_Iterations, state, position[1]
+                )
+            elif name_Compare == "Kmean_GaussianMixture":
+                self.cal_Kmean(data, cluster, num_Iterations, state)
+                self.cal_GausianMixture(
+                    data, cluster, num_Iterations, state, position[1]
+                )
+            elif name_Compare == "GaussianMixture_MiniKmean":
+                self.cal_MiniBatchKmean(
+                    data, cluster, num_Iterations, state, position[0]
+                )
+                self.cal_GausianMixture(
+                    data, cluster, num_Iterations, state, position[1]
+                )
             plt.tight_layout()
             plt.show()
-            return timer_Kmean, time_MiniKmean
 
-        cal_Time()
+        show_ImgCompare("Kmean_MiniBatchKmean"), show_ImgCompare(
+            "Kmean_GaussianMixture"
+        ), show_ImgCompare("GaussianMixture_MiniKmean")
         return timer_Kmean, time_MiniKmean
 
     def cal_Kmean(self, data, cluster, num_Iterations, state):
@@ -63,7 +80,7 @@ class CompareAccuracy:
                 f"K-means: Clusters: {cluster[i]}, Iterations: {num_Iterations[i]},Time: {kmeans_time:.2f} seconds\nSilhouette Score:{silhouette_ScoreKmean:.2f},Inertia:{kmeans.inertia_:.2f}"
             )
 
-    def cal_MiniBatchKmean(self, data, cluster, num_Iterations, state):
+    def cal_MiniBatchKmean(self, data, cluster, num_Iterations, state, position):
         for i, items in enumerate(cluster):
             start_time = time.time()
             minibatch_kmeans = MiniBatchKMeans(
@@ -76,7 +93,7 @@ class CompareAccuracy:
             silhouette_ScoreMiniKmean = silhouette_score(
                 data, minibatch_kmeans.labels_
             )  # Silhouette Score
-            plt.subplot(len(self.num_Clutered), 2, i * 2 + 2)
+            plt.subplot(len(self.num_Clutered), 2, i * 2 + position)
             plt.scatter(
                 data[:, 0], data[:, 1], c=minibatch_kmeans.labels_, cmap="viridis"
             )
@@ -92,7 +109,7 @@ class CompareAccuracy:
                 f"Mini Batch K-means: Clusters: {cluster[i]}, Iterations: {num_Iterations[i]},Time: {minibatch_kmeans_time:.2f} seconds\n Silhouette Score:{silhouette_ScoreMiniKmean:.2f},Inertia:{minibatch_kmeans.inertia_:.2f}"
             )
 
-    def cal_GausianMixture(self, data, cluster, num_Iterations, state):
+    def cal_GausianMixture(self, data, cluster, num_Iterations, state, position):
         for i, items in enumerate(cluster):
             start_time = time.time()
             gmm = GaussianMixture(
@@ -107,7 +124,7 @@ class CompareAccuracy:
             silhouette_ScoreMiniKmean = silhouette_score(
                 data, labels
             )  # Silhouette Score
-            plt.subplot(len(self.num_Clutered), 2, i * 2 + 1)
+            plt.subplot(len(self.num_Clutered), 2, i * 2 + position)
             plt.scatter(data[:, 0], data[:, 1], c=labels, cmap="viridis")
             plt.scatter(
                 means[:, 0],

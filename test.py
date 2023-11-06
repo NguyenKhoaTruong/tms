@@ -3,69 +3,7 @@ from sklearn.cluster import KMeans
 from geopy.distance import great_circle
 import matplotlib.pyplot as plt
 
-
-class Kmean_:
-    def __init__(self):
-        print("K_mean Fixed")
-        self.data_Point = []
-        self.data_Center = []
-
-    def get_DataShowMap(self, data, num_Cluster):
-        fit_Data = []
-        new_Data = []
-        kmeans = KMeans(n_clusters=num_Cluster, random_state=0)
-        threshold_distance_km = 2
-        # for i in range(len(data)):
-        kmeans.fit(data)
-        labels = kmeans.labels_
-
-        distances_km = [
-            great_circle(data[j], kmeans.cluster_centers_[labels[j]]).kilometers
-            for j in range(len(data))
-        ]
-        for j in range(len(data)):
-            if distances_km[j] <= threshold_distance_km:
-                fit_Data.append(data[j])
-            else:
-                new_Data.append(data[j])
-        if len(fit_Data) < len(data):
-            kmeans = KMeans(n_clusters=num_Cluster, random_state=0)
-            data = fit_Data
-        elif len(new_Data) > 0:
-            kmeans = KMeans(n_clusters=num_Cluster, random_state=0)
-            data = new_Data
-        elif len(fit_Data) == len(data):
-            print("Process Data")
-        else:
-            print("Processing....")
-        # self.data_Center = kmeans.cluster_centers_.tolist()
-        # for cluster_label in range(len(kmeans.cluster_centers_)):
-        #     point = np.array(
-        #         [data[i] for i in range(len(data)) if labels[i] == cluster_label]
-        #     )
-        #     self.data_Point.append(point)
-        # print("check value data center", self.data_Center)
-        # print("check value data point", self.data_Point)
-        return self.data_Center, self.data_Point
-
-    def show_Char(self, kmeans):
-        data = np.array(data)
-        plt.scatter(data[:, 1], data[:, 0], c=kmeans.labels_, cmap="viridis")
-        plt.scatter(
-            kmeans.cluster_centers_[:, 1],
-            kmeans.cluster_centers_[:, 0],
-            s=200,
-            c="red",
-            label="Centroids",
-        )
-        plt.xlabel("Longitude")
-        plt.ylabel("Latitude")
-        plt.title("K-means Clustering Result")
-        plt.legend()
-        plt.show()
-
-
-num_Cluster = 10
+num_Cluster = 5
 data = [
     [10.79873893, 106.58475074],
     [10.76494905, 106.63425263],
@@ -161,5 +99,57 @@ data = [
     [10.79737064, 106.62031109],
     [10.77849039, 106.66544494],
 ]
+fit_Data = []
+new_Data = []
+threshold_distance_km = 5
+kmeans = KMeans(n_clusters=num_Cluster, random_state=0)
 
-Kmean_().get_DataShowMap(data, num_Cluster)
+# for i in range(len(data)):
+kmeans.fit(data)
+labels = kmeans.labels_
+
+distances_km = [
+    great_circle(data[j], kmeans.cluster_centers_[labels[j]]).kilometers
+    for j in range(len(data))
+]
+for j in range(len(data)):
+    if distances_km[j] <= threshold_distance_km:
+        fit_Data.append(data[j])
+    else:
+        new_Data.append(data[j])
+if len(fit_Data) < len(data):
+    kmeans = KMeans(n_clusters=num_Cluster, random_state=0)
+    data = fit_Data
+elif len(new_Data) > 0:
+    kmeans = KMeans(n_clusters=num_Cluster, random_state=0)
+    data = new_Data
+elif len(fit_Data) == len(data):
+    print("Process Data")
+else:
+    print("Processing....")
+
+kmeans = KMeans(n_clusters=num_Cluster, random_state=0)
+kmeans.fit(new_Data)
+labels = kmeans.labels_
+distances_km_ = [
+    great_circle(new_Data[round(1)], kmeans.cluster_centers_[labels[j]]).kilometers
+    for j in range(len(new_Data))
+]
+
+print("check value distance kmean new dataa", distances_km_, len(distances_km_))
+# data = np.array(data)
+# plt.scatter(data[:, 1], data[:, 0], c=kmeans.labels_, cmap="viridis")
+# plt.scatter(
+#     kmeans.cluster_centers_[:, 1],
+#     kmeans.cluster_centers_[:, 0],
+#     s=200,
+#     c="red",
+#     label="Centroids",
+# )
+# plt.xlabel("Longitude")
+# plt.ylabel("Latitude")
+# plt.title("K-means Clustering Result")
+# plt.show()
+# plt.legend()
+# print("check value new dataa", new_Data, len(new_Data))
+# print("check value fit dataa", fit_Data, len(fit_Data))
