@@ -8,7 +8,7 @@ from Process_Data.PyQT5_Data import data_Proc
 
 
 class ClusterData:  # Sửa lại phân cụm dữ liệu
-    def __init__(self, dataSelect, mainWindow, num_Cluster):
+    def __init__(self, dataSelect, mainWindow, num_Cluster, type_Equipment):
         self.dataOrder = []
         self.dataSelect_ = []
         self.dataCondition = []
@@ -22,11 +22,13 @@ class ClusterData:  # Sửa lại phân cụm dữ liệu
                 for item in self.dataOrder
                 if all(element != "" for element in item)
             ]
-            self.valid_Data_Select(dataSelect, mainWindow, data_clear, num_Cluster)
+            self.valid_Data_Select(
+                dataSelect, mainWindow, data_clear, num_Cluster, type_Equipment
+            )
         except ValueError as e:
             print("Log Error", e)
 
-    def valid_Data_Select(self, data, data_UI, data_clear, num_Cluster):
+    def valid_Data_Select(self, data, data_UI, data_clear, num_Cluster, type_Equipment):
         try:
             if len(data) == 0:
                 mb.showinfo(
@@ -39,7 +41,9 @@ class ClusterData:  # Sửa lại phân cụm dữ liệu
 
                 data_Select = get_Data_DB().data_Select(self.dataSelect_)
                 data_ = data_Proc().get_Data(data_Select)
-                data_UI.show_UI = ui_Cluster(data_clear, data_, num_Cluster)
+                data_UI.show_UI = ui_Cluster(
+                    data_clear, data_, num_Cluster, type_Equipment
+                )
                 data_UI.show_UI.show()
         except ValueError as e:
             print("Log Error", e)

@@ -162,12 +162,52 @@ Viết pro so sánh các thuật toán phân cụm:
     Inertia là một phép đo được sử dụng để đánh giá mức độ gom cụm trong dữ liệu. Inertia đo khoảng cách trung bình giữa các điểm dữ liệu và tâm cụm gần nhất của chúng. Giá trị Inertia càng nhỏ thì mức độ gom cụm càng tốt.
     thêm 1 tt so sánh trong biểu đồ
 
-   6/11: thiếu vẽ hình hiển thị cho 3 thuật toán.: thuật toán gausianMixture thiếu giá trị Inertia - thay thế bằng thông số khác.
+   6/11:thuật toán gausianMixture thiếu giá trị Inertia - thay thế bằng thông số khác.
 
 
 truyền parameter distance cho thuật toán k-mean:
     - giá trị không phù hợp sau khi lặp có num_cluster=? và data=?.
     - Lặp cho đến khi giá trị không còn phù hợp nữa.
+
+
+
+Hiện tại việc chia cluster không đồng đều
+thêm weight volume, trip type(tải trọng của xe)
+mỗi cluter sẽ chia đều hoặc tương đối. với tải trọng phù hợp (total volume) -> tải trọng phù hợp được tự động cấu hình.
+nếu cluster của trip vượt qua ngưỡng or giới hạn thì : cần chi nhỏ cluster đó ra thành nhiều cluster mới.
+
+
+ví dụ cần thiết:
+https://elki-project.github.io/tutorial/same-size_k_means
+https://towardsdatascience.com/advanced-k-means-controlling-groups-sizes-and-selecting-features-a998df7e6745
+https://www.researchgate.net/post/Can_anyone_recommend_algorithms_to_deal_with_unbalanced_clusters_for_classification/508b875de39d5e957600002f/citation/download
+
+
+8/11 : Viết hàm so sánh weight với tải trọng xe. thực hiện k mean liên tục. cho đến khi có kết quả hợp lý.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+phương pháp tính ra số cụm k cho thuật toán kmena tốt nhất: áp dụng khi không muốn nhập dữ liệu của  cụm
+    https://www.geeksforgeeks.org/elbow-method-for-optimal-value-of-k-in-kmeans/
+
+
     
    
     

@@ -682,13 +682,15 @@ class get_Data_DB:
     def showDataImportFile(self):
         query = text(
             """
-                Select DISTINCT top 100 so.OrderId,so.OrderNo,so.ShipTo,so.ShipToAddress,so.TripType,so.Weight,so.Volume,
+                Select DISTINCT so.OrderId,so.OrderNo,so.ShipTo,so.ShipToAddress,so.TripType,so.Weight,so.Volume,
                 so.ItemNote,so.Qty,so.CODAmount,so.Priority,st.CompleteTime,so.RequestGroup,
                 so.RequestTruckType,so.OtherRefNo1,st.DriverId,st.ETP,st.ETA,st.ATP,st.ATD,
                 st.ATP
                 from  MA_Equipment me,TE_SimpleOrder so, TE_SimpleTrip st, MA_Companys mc
                 where so.TripNo=st.TripNo
                 order by so.OrderId desc
+                OFFSET 6 ROWS
+				FETCH NEXT 100 ROWS ONLY;
                 """
         )
         data = []

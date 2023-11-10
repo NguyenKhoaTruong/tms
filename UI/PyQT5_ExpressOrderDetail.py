@@ -80,7 +80,7 @@ class TableWidget(QTableWidget):
                 "PickUp",
                 "Ship To Code",
                 "Ship To Address",
-                "Trip Type",
+                # "Trip Type",
                 "Weight",
                 "Volume",
                 "Item Note",
@@ -192,7 +192,7 @@ class TableWidget(QTableWidget):
                 "PickUp",
                 "Ship To Code",
                 "Ship To Address",
-                "Trip Type",
+                # "Trip Type",
                 "Weight",
                 "Volume",
                 "Item Note",
@@ -459,19 +459,22 @@ class AppDemo(QWidget):
     def get_Data(self):
         try:
             selected_data = self.table.get_selected_data()
+            input_dialog = InputDialog(self)
+            if input_dialog.exec_() == QDialog.Accepted:
+                num_Cluster = input_dialog.input_Cluster.text()
+                equipment = input_dialog.cb_Equipment_Type.currentText()[:-1]
+                type_Equipment = float(equipment) * 1000
+
             if len(selected_data) == 0:
                 mb.showwarning(title="Notification!!!", message="No Data")
             elif len(selected_data) <= 4:
                 mb.showwarning(title="Notification!!!", message="At least five data")
             elif len(selected_data) >= 5 and len(selected_data) < 10:
-                ClusterData(selected_data, self, 0)
+                ClusterData(selected_data, self, 0, type_Equipment)
                 self.showMinimized()
             else:
-                input_dialog = InputDialog(self)
-                if input_dialog.exec_() == QDialog.Accepted:
-                    num_Cluster = input_dialog.input_Cluster.text()
-                    ClusterData(selected_data, self, int(num_Cluster))
-                    self.showMinimized()
+                ClusterData(selected_data, self, int(num_Cluster), type_Equipment)
+                self.showMinimized()
         except ValueError as e:
             print("Log Error", e)
 

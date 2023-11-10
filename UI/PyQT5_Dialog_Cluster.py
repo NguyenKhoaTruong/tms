@@ -10,6 +10,7 @@ from PyQt5.QtWidgets import (
     QLabel,
     QSpacerItem,
     QSizePolicy,
+    QComboBox,
 )
 from PyQt5.QtCore import QFile, QTextStream
 from PyQt5.QtCore import Qt
@@ -24,19 +25,35 @@ class InputDialog(QDialog):
 
         layout = QVBoxLayout()
         layout_Input = QHBoxLayout()
-        self.label_Cluster = QLabel("Number Cluster:")
-        self.label_Cluster.setStyleSheet("font-size:15px")
+        layout_Type = QHBoxLayout()
+
+        label_Cluster = QLabel("Number Cluster:")
+        label_Cluster.setStyleSheet("font-size:15px")
+
+        label_Equipment_Type = QLabel("Equipment Type:")
+        label_Equipment_Type.setStyleSheet("font-size:15px")
+
+        self.cb_Equipment_Type = QComboBox()
+        self.cb_Equipment_Type.setStyleSheet("font-size:15px")
+        self.cb_Equipment_Type.setFixedWidth(310)
+        self.cb_Equipment_Type.addItem("5T")
+        self.cb_Equipment_Type.addItem("10T")
+        self.cb_Equipment_Type.addItem("15T")
+        self.cb_Equipment_Type.addItem("20T")
+
         self.input_Cluster = QLineEdit(self)
+        self.input_Cluster.setFixedHeight(30)
         self.input_Cluster.setText("10")
         self.input_Cluster.setStyleSheet("font-size:15px")
         self.input_Cluster.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        layout_Input.addWidget(self.label_Cluster)
-        # spacer = QSpacerItem(10, 10, QSizePolicy.Expanding, QSizePolicy.Minimum)
-        # layout_Input.addItem(spacer)
-        layout_Input.addWidget(self.input_Cluster)
 
+        layout_Input.addWidget(label_Cluster)
+        layout_Input.addWidget(self.input_Cluster)
+        layout_Type.addWidget(label_Equipment_Type)
+        layout_Type.addWidget(self.cb_Equipment_Type)
         layout.setSpacing(20)
         layout.addLayout(layout_Input)
+        layout.addLayout(layout_Type)
         self.button_box = QDialogButtonBox(
             QDialogButtonBox.Ok | QDialogButtonBox.Cancel, self
         )
@@ -51,6 +68,5 @@ class InputDialog(QDialog):
 
     def css_Layout(self):
         self.button_box.setFixedHeight(30)
-        self.input_Cluster.setFixedHeight(30)
         self.button_box.setStyleSheet("font-size:15px")
         css.css_Clsuter()

@@ -38,26 +38,28 @@ import UI.css_UI as css
 
 
 class ui_Cluster(QWidget):
-    def __init__(self, data, dataOrder, num_Cluster):
+    def __init__(self, data, dataOrder, num_Cluster, type_Equipment):
         super().__init__()
-        load_dotenv()
+        self.data = [
+            ["YKK", 10.707197855355952, 106.93615121102836],
+            ["NABATI", 10.662705470457466, 106.70724887936655],
+        ]
         self.api_Key = os.getenv("API_KEY")
+        load_dotenv()
         self.array_Point = []
         self.on_Return = False
         self.off_Return = False
         self.start_Point = False
         self.data_Cluster = dataOrder
         self.num_clusters = num_Cluster
+        self.equipment_Type = type_Equipment
         self.data_Map = ""
         self.selected_cluster = []
         self.data_Point = []
         self.data_Center = []
         self.data_Matrix = []
         self.data_Start_Points = []
-        self.data = [
-            ["YKK", 10.707197855355952, 106.93615121102836],
-            ["NABATI", 10.662705470457466, 106.70724887936655],
-        ]
+        self.data_Weight = []
         self.ui_()
 
     def ui_(self):
@@ -249,12 +251,34 @@ class ui_Cluster(QWidget):
         if len(self.data_Cluster) > 10:
             self.set_UICluster()
             self.show_Data_Cluster()
+            self.show_Map_Cluster()
+            self.cal_Condisiton_Weight()
         else:
             self.showMaximized()
             self.set_UINoCluster()
             self.get_Off_Return()
             self.add_UINoCluster()
             ShowMapCluster(self.array_Point, self.layout_UB)
+
+    def cal_Condisiton_Weight(self):
+        total_Weight = []
+        temp = 0
+        for value in self.data_Weight:
+            if value < self.equipment_Type:
+                total_Weight.append(value)
+            else:
+                pass
+        if (len(total_Weight) / len(self.data_Weight)) * 100 >= 60:
+            print("đủ điều kiện")
+            pass
+        else:
+            while (len(total_Weight) / len(self.data_Weight)) * 100 < 60:
+                temp += 1
+                self.show_Data_Cluster()
+                print("chưa đủ điều kiện")
+                if temp == 100:
+                    break
+        return total_Weight
 
     def set_UICluster(self):
         self.btnOffMode.hide()
@@ -364,6 +388,16 @@ class ui_Cluster(QWidget):
             print("Log Error", e)
 
     def show_Data_Cluster(self):
+        labels, centers = self.use_KmeanCluster()
+        self.set_ValueDataMatrix(labels)
+        self.set_ValueDataCenter(centers)
+        self.set_ValueDataPoint(labels)
+        self.cal_WeightTrip()
+        self.cbCluster.addItems([f"Trip {i+1}" for i in range(len(self.data_Point))])
+        self.set_ValueClusterData()
+        self.cbCluster.currentIndexChanged.connect(self.show_Data_K_Mean_TSP)
+
+    def use_KmeanCluster(self):
         self.data_array = np.array(self.data_Cluster)
         self.array_Matrix = np.array(
             [
@@ -374,78 +408,22 @@ class ui_Cluster(QWidget):
                 for item in self.data_array
             ]
         )
+        weight = np.array([float(item[2]) for item in self.data_array]).tolist()
         kmeans = KMeans(
             n_clusters=self.num_clusters,
-            init="k-means++",
-            n_init=30,
+            # init="k-means++",
+            # n_init=30,
             max_iter=100,
-            tol=1e-4,
-            random_state=0,
+            # tol=1e-4,
+            random_state=10,
         )
-
-        kmeans.fit(self.array_Matrix)
-        self.labels = kmeans.labels_
-        self.centers = kmeans.cluster_centers_
-
-        self.set_ValueDataMatrix(self.labels)
-        self.set_ValueDataCenter(self.centers)
-        self.set_ValueDataPoint(self.labels)
-        # thực hiện tách cụm khi cụm có nhiều data
-        # self.divided_Cluster()
-
-        self.cbCluster.addItems([f"Trip {i+1}" for i in range(len(self.data_Point))])
-        self.set_ValueClusterData()
-        self.cbCluster.currentIndexChanged.connect(self.show_Data_K_Mean_TSP)
-        self.show_Map_Cluster()
+        kmeans.fit(self.array_Matrix, sample_weight=weight)
+        labels = kmeans.labels_
+        centers = kmeans.cluster_centers_
+        return labels, centers
 
     def set_ValueClusterData(self):
         self.selected_cluster = self.data_Point[0]
-
-    # chia nhỏ cụm
-    def divided_Cluster(self):
-        def convent_DataCenter(data, center_Data):
-            for value in data:
-                center_Data.append([value[2], value[3]])
-            # print("check value data centreDataa", len(center_Data))
-            return center_Data
-
-        data = []
-        temp = []
-        dataPoint = self.data_Point
-        data_Center = self.data_Center
-        for index, value in enumerate(dataPoint):
-            if len(value) > 25:
-                temp.append(index)
-                num = len(value) // 3
-                kmean_Sub = KMeans(n_clusters=num)
-                kmean_Sub.fit(value)
-                labels_Sub = kmean_Sub.labels_
-                center_Sub = kmean_Sub.cluster_centers_
-                data_new = []
-                for j in range(num):
-                    sub_Data = np.array(value)[labels_Sub == j]
-                    data_new.append(sub_Data)
-                data.extend(data_new)
-
-            else:
-                data.append(value)
-        # print("check vlaue data", data, len(data))
-        # Xóa dữ liệu trong biến data Point và center
-        # print("check value data point", dataPoint, len(dataPoint))
-        new_Point = np.delete(dataPoint, temp[0])
-        # print("check value len new point strat", len(new_Point))
-        data_Center.pop(temp[0])
-        # thêm dữ liệu mới phân cụm vào data:
-        new_Point = np.append(new_Point, data)
-        # print("check value data new point", new_Point, len(new_Point))
-        new_Center = convent_DataCenter(data_Center, center_Sub)
-        # print("check len point", len(new_Point))
-        # print("check value data cemter", data_Center, len(data_Center))
-        # data_Center.append
-        # Cập nhật lại hai biến point và data center.
-        # self.dataPoint,self.dataCemter
-
-        # Trả ra kết quả cho hàm
 
     def remove_DataOld(self, index, data):
         print()
@@ -470,6 +448,32 @@ class ui_Cluster(QWidget):
             cluster_points = self.array_Matrix[labels == i]
             self.data_Point.append(cluster_points)
         return self.data_Point
+
+    def cal_WeightTrip(self):
+        weight = []
+        data = np.array(self.data_Cluster).tolist()
+        points_ = self.data_Point
+        for item in points_:
+            temp = []
+            for value in item:
+                lat = float(value[0])
+                lon = float(value[1])
+                for value_ in data:
+                    if lat == float(value_[5]) and lon == float(value_[6]):
+                        temp.append(float(value_[2]))
+            weight.append(temp)
+        weight_Trip = self.convent_DataWeight(weight)
+        self.data_Weight = weight_Trip
+        return self.data_Weight
+
+    def convent_DataWeight(self, data):
+        weight_Convent = []
+        for items in data:
+            tmp = 0
+            for value in items:
+                tmp += value
+            weight_Convent.append(tmp)
+        return weight_Convent
 
     def remove_data_duplicate(self, data):
         data_Clean = []
