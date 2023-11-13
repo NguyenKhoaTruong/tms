@@ -121,6 +121,7 @@ data_Point = []
 total_weight = []
 arr_iter = []
 arr_weight_iter = []
+arr_history = []
 
 
 def kmeans_with_repeats(data, weight, iter_):
@@ -138,51 +139,42 @@ def kmeans_with_repeats(data, weight, iter_):
         for i, value in enumerate(weight_):
             fout.write(f"\nTrip {i + 1}:{value}\n")
     arr_iter.extend([iter_])
-    arr_weight_iter.extend([weight_])
+    arr_weight_iter.extend([kmeans.cluster_centers_.copy()])
+    arr_history.extend([kmeans.cluster_centers_.copy()])
+
     return weight_
 
 
-def show_Result():
-    print("check vlaue data arr_weight_iter", arr_weight_iter, len(arr_weight_iter))
-    iterations = 10
-    weight = [
-        3895.26,
-        13726.02,
-        11787.28,
-        7831.36,
-        2488.42,
-        17740.33,
-        2015.38,
-        1801.76,
-        6435.04,
-        6287.98,
-    ]
-    num_iterations = range(1, iterations + 1)
-    num_clusters = [10] * iterations
-    plt.plot(
-        num_iterations,
-        weight,
-        marker="o",
-        linestyle="-",
-        color="b",
-        label="Cluster Data",
-    )
-    plt.plot(
-        num_iterations,
-        num_clusters,
-        linestyle="--",
-        color="r",
-        label="Number of Clusters",
-    )
-
-    plt.xlabel("Number of Iterations")
-    plt.ylabel("Weight")
-
-    plt.title(f"Kmeans Cluster: Data:{100} ,Ratio: 70%, Num_Iter: {len(arr_iter)}")
-
-    plt.legend()
-
-    plt.show()
+# def show_Result():
+#     plt.figure(figsize=(19, 12))
+#     for i, items in enumerate(cluster):
+#         start_time = time.time()
+#         kmeans = KMeans(
+#             n_clusters=cluster[i],
+#             max_iter=num_Iterations[i],
+#             random_state=state[i],
+#         )
+#         kmeans.fit(data)
+#         kmeans_time = time.time() - start_time
+#         silhouette_ScoreKmean = silhouette_score(
+#             data, kmeans.labels_
+#         )  # Silhouette Score
+#         # Paint Chart
+#         plt.subplot(len(self.num_Clutered), 2, i * 2 + 1)
+#         plt.scatter(data[:, 0], data[:, 1], c=kmeans.labels_, cmap="viridis")
+#         plt.scatter(
+#             kmeans.cluster_centers_[:, 0],
+#             kmeans.cluster_centers_[:, 1],
+#             marker="x",
+#             s=200,
+#             linewidths=3,
+#             color="r",
+#         )
+#         plt.title(
+#             f"K-means: Clusters: {cluster[i]}, Iterations: {num_Iterations[i]},Time: {kmeans_time:.2f} seconds\nSilhouette Score:{silhouette_ScoreKmean:.2f},Inertia:{kmeans.inertia_:.2f}"
+#         )
+#     plt.tight_layout()
+#     plt.show()
 
 
 def set_ValueDataPoint(data, label, num):
@@ -235,4 +227,18 @@ def reload_function(weight_kmean, data, data2, weight):
 temp = 0
 data_weight_test = kmeans_with_repeats(data2, weight, temp)
 data_reload = reload_function(data_weight_test, data, data2, weight)
-show_Result()
+# show_Result()
+# print("check value data history", arr_history, len(arr_history))
+print("check vlaue data arr_history", arr_history, len(arr_history))
+# print("check len(arr_History)", arr_history, len(arr_history))
+# new_duplicate = []
+# for items in arr_history:
+#     for value in items:
+#         lat = value[0]
+#         lon = value[1]
+#         if [lat, lon] not in new_duplicate:
+#             new_duplicate.append([lat, lon])
+# # if len(new_duplicate) > 5:
+#     print("check value", value)
+print("check len", len(new_duplicate))
+print("chắc calue in kye", arr_history[0])

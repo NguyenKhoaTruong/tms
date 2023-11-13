@@ -13,15 +13,18 @@ from PyQt5.QtWidgets import (
     QLineEdit,
     QGridLayout,
 )
-from PyQt5.QtCore import QTime
-from Cluster.Main_Cluster import Main_Clustering
-from Process_Data.PyQT5_TSP import use_TSP
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from Process_Data.PyQT5_TSP_Cluster import use_TSP_Cluster
+from Cluster.Main_Cluster import Main_Clustering
+from PyQt5.QtCore import QTime
+from matplotlib.figure import Figure
+from Process_Data.PyQT5_TSP import use_TSP
 from Cluster.Compare_Accuracy import CompareAccuracy
 from Map_.PyQT5_Map_Cluster import Show_Map_Cluster
 from UI.PyQT5_Dialog_Location import InputDialog
 from UI.PyQT5_LoadingData import LoadingGif
 from UI.PyQT5_Dialog_Compare import DialogCompare
+from UI.PYQT5_Capacity import Capacity_Mode
 from PyQt5.QtCore import QFile, QTextStream
 from Map_.PyQT5_Map import ShowMapCluster
 from sklearn.cluster import KMeans
@@ -44,6 +47,7 @@ class ui_Cluster(QWidget):
             ["YKK", 10.707197855355952, 106.93615121102836],
             ["NABATI", 10.662705470457466, 106.70724887936655],
         ]
+        self.items_Mode = ["Volume", "Weight", "Trip Type"]
         self.api_Key = os.getenv("API_KEY")
         load_dotenv()
         self.array_Point = []
@@ -69,6 +73,7 @@ class ui_Cluster(QWidget):
         self.layout_InCluster = QHBoxLayout()
         self.content_Input = QHBoxLayout()
         self.layout_UB = QHBoxLayout()
+        self.layout_Capacity = QHBoxLayout()
         self.layout_OpCluster = QHBoxLayout()
 
         label_StartPoint = QLabel("Start Point:")
@@ -115,10 +120,10 @@ class ui_Cluster(QWidget):
 
         self.cbAlgorithmsCluster = QComboBox()
         self.cbAlgorithmsCluster.setFixedWidth(180)
+        self.cbAlgorithmsCluster.addItem("K_Means")
         self.cbAlgorithmsCluster.addItem("Gausian Mixture")
         self.cbAlgorithmsCluster.addItem("Mean Shift")
         self.cbAlgorithmsCluster.addItem("Mini Batch K Mean")
-        self.cbAlgorithmsCluster.addItem("K_Means")
         self.cbCluster = QComboBox()
         self.cbCluster.setFixedWidth(180)
 
@@ -186,6 +191,26 @@ class ui_Cluster(QWidget):
 
         self.input_CTime.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
+        boder_Capacity = QHBoxLayout()
+        mode_Capacity = QGridLayout()
+        label_Capacity = QLabel("Capacity View Mode")
+        btn_Mode = QPushButton("Refresh")
+        btn_Mode.clicked.connect(self.handle_Refresh)
+        self.cb_Mode = QComboBox()
+        figure = Figure()
+        canvas = FigureCanvas(figure)
+        mode_Capacity.addWidget(label_Capacity, 1, 0)
+        mode_Capacity.addWidget(self.cb_Mode, 2, 0)
+        mode_Capacity.addWidget(btn_Mode, 2, 1)
+        mode_Capacity.setRowStretch(3, 1)
+        mode_Capacity.setContentsMargins(10, 200, 0, 0)
+        boder_Capacity.addLayout(mode_Capacity)
+        boder_Capacity.addWidget(canvas)
+        self.add_ItemMode(self.cb_Mode, self.items_Mode)
+        self.chart(figure, canvas)
+        self.custom_CSS(label_Capacity, btn_Mode, self.cb_Mode)
+
+        self.layout_Capacity.addLayout(boder_Capacity)
         self.layout_InCluster.addWidget(label_StartPoint)
         self.layout_InCluster.addSpacing(65)
         self.layout_InCluster.addWidget(self.cbStart)
@@ -226,17 +251,11 @@ class ui_Cluster(QWidget):
         self.content_Input.addWidget(label_Cluster)
         self.content_Input.addSpacing(50)
         self.content_Input.addWidget(self.cbAlgorithmsCluster)
-        # self.content_Input.addSpacing(150)
         self.content_Input.addStretch(1)
         self.content_Input.addWidget(self.btn_CompareCluster)
         self.content_Input.addWidget(self.btn_Compare)
         self.content_Input.addWidget(self.btn_Back)
-
-        self.layOut_UI.addLayout(self.layout_InCluster)
-        self.layOut_UI.addLayout(self.layout_OpCluster)
-        self.layOut_UI.addLayout(self.content_Input)
-        self.layOut_UI.addLayout(self.layout_UB)
-
+        self.add_MainLayout()
         self.set_Style()
         self.data_Start_Point()
         self.set_ValueStartTime()
@@ -244,8 +263,40 @@ class ui_Cluster(QWidget):
         self.setLayout(self.layOut_UI)
         self.show_Input_Data_TSP()
         self.role_Menu()
-        icon = QIcon("logo.ico")  # Thay đổi đường dẫn tới biểu tượng của bạn
+        icon = QIcon("logo.ico")
         self.setWindowIcon(icon)
+
+    def add_ItemMode(self, cb, item):
+        for value in item:
+            cb.addItem(value)
+        return cb
+
+    def chart(self, figure, canvas):
+        ax = figure.add_subplot(111)
+        categories = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
+        values = [25, 40, 30, 45, 50, 55, 65, 75, 75, 85]
+        ax.bar(categories, values, color="skyblue")
+        ax.set_title("K-Mean Cluster")
+        ax.set_xlabel("Trip")
+        ax.set_ylabel("Weight")
+        canvas.draw()
+
+    def custom_CSS(self, title, button, cb):
+        title.setStyleSheet("font-size:15px")
+        button.setFixedHeight(40)
+        button.setFixedWidth(100)
+        cb.setFixedHeight(40)
+        cb.setFixedWidth(150)
+
+    def add_MenuLayout(self):
+        print()
+
+    def add_MainLayout(self):
+        self.layOut_UI.addLayout(self.layout_InCluster)
+        self.layOut_UI.addLayout(self.layout_OpCluster)
+        self.layOut_UI.addLayout(self.content_Input)
+        self.layOut_UI.addLayout(self.layout_UB)
+        # self.layOut_UI.addLayout(self.layout_Capacity)
 
     def role_Menu(self):
         if len(self.data_Cluster) > 10:
@@ -253,6 +304,7 @@ class ui_Cluster(QWidget):
             self.show_Data_Cluster()
             self.show_Map_Cluster()
             self.cal_Condisiton_Weight()
+            # Capacity_Mode(self.layout_Capacity)
         else:
             self.showMaximized()
             self.set_UINoCluster()
@@ -268,11 +320,11 @@ class ui_Cluster(QWidget):
                 total_Weight.append(value)
             else:
                 pass
-        if (len(total_Weight) / len(self.data_Weight)) * 100 >= 60:
+        if (len(total_Weight) / len(self.data_Weight)) * 100 >= 40:
             print("đủ điều kiện")
             pass
         else:
-            while (len(total_Weight) / len(self.data_Weight)) * 100 < 60:
+            while (len(total_Weight) / len(self.data_Weight)) * 100 < 40:
                 temp += 1
                 self.show_Data_Cluster()
                 print("chưa đủ điều kiện")
@@ -409,15 +461,20 @@ class ui_Cluster(QWidget):
             ]
         )
         weight = np.array([float(item[2]) for item in self.data_array]).tolist()
+        volume = np.array([float(item[3]) for item in self.data_array]).tolist()
         kmeans = KMeans(
             n_clusters=self.num_clusters,
-            # init="k-means++",
-            # n_init=30,
+            init="k-means++",
+            n_init=30,
             max_iter=100,
-            # tol=1e-4,
-            random_state=10,
+            tol=1e-4,
         )
         kmeans.fit(self.array_Matrix, sample_weight=weight)
+        # text = self.cb_Mode.currentText()
+        # if text == "Volume":
+        #     kmeans.fit(self.array_Matrix, sample_weight=volume)
+        # elif text == "Weight":
+        #     kmeans.fit(self.array_Matrix, sample_weight=weight)
         labels = kmeans.labels_
         centers = kmeans.cluster_centers_
         return labels, centers
@@ -639,3 +696,7 @@ class ui_Cluster(QWidget):
                 self.off_Return,
                 self.data_Start_Points,
             )
+
+    def handle_Refresh(self):
+        self.show_Data_Cluster()
+        self.show_Map_Cluster()

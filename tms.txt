@@ -189,18 +189,7 @@ https://www.researchgate.net/post/Can_anyone_recommend_algorithms_to_deal_with_u
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+14/11: vẽ biểu đồ thực hiện thuật toán kmean qua các lần chạy: hiển thị lên matloplit , lưu trữ dữ liệu cho một danh sách
 
 
 
@@ -208,9 +197,11 @@ phương pháp tính ra số cụm k cho thuật toán kmena tốt nhất
     https://www.geeksforgeeks.org/elbow-method-for-optimal-value-of-k-in-kmeans/
 
 
+
     
    
     
+
 
 
 

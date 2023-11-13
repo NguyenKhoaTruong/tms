@@ -27,29 +27,27 @@ class CompareAccuracy:
             position = [1, 2]
             # Show Image Compare Algorithms
             plt.figure(figsize=(19, 12))
-            if name_Compare == "Kmean_MiniBatchKmean":
+            if name_Compare == "K_Means":
                 self.cal_Kmean(data, cluster, num_Iterations, state)
-                self.cal_MiniBatchKmean(
-                    data, cluster, num_Iterations, state, position[1]
-                )
-            elif name_Compare == "Kmean_GaussianMixture":
-                self.cal_Kmean(data, cluster, num_Iterations, state)
-                self.cal_GausianMixture(
-                    data, cluster, num_Iterations, state, position[1]
-                )
-            elif name_Compare == "GaussianMixture_MiniKmean":
-                self.cal_MiniBatchKmean(
-                    data, cluster, num_Iterations, state, position[0]
-                )
-                self.cal_GausianMixture(
-                    data, cluster, num_Iterations, state, position[1]
-                )
+            #     self.cal_MiniBatchKmean(
+            #         data, cluster, num_Iterations, state, position[1]
+            #     )
+            # elif name_Compare == "Kmean_GaussianMixture":
+            #     self.cal_Kmean(data, cluster, num_Iterations, state)
+            #     self.cal_GausianMixture(
+            #         data, cluster, num_Iterations, state, position[1]
+            #     )
+            # elif name_Compare == "GaussianMixture_MiniKmean":
+            #     self.cal_MiniBatchKmean(
+            #         data, cluster, num_Iterations, state, position[0]
+            #     )
+            #     self.cal_GausianMixture(
+            #         data, cluster, num_Iterations, state, position[1]
+            #     )
             plt.tight_layout()
             plt.show()
 
-        show_ImgCompare("Kmean_MiniBatchKmean"), show_ImgCompare(
-            "Kmean_GaussianMixture"
-        ), show_ImgCompare("GaussianMixture_MiniKmean")
+        show_ImgCompare("K_Means")
         return timer_Kmean, time_MiniKmean
 
     def cal_Kmean(self, data, cluster, num_Iterations, state):
