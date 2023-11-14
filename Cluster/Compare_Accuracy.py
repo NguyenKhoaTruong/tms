@@ -1,3 +1,7 @@
+import sys
+
+sys.path.append("E:\PythonGUI-ManageEmployee\Pyqt5")
+from UI.PYQT5_Compare_Kmeans import ui_Test
 from sklearn.cluster import KMeans, MiniBatchKMeans
 from sklearn.mixture import GaussianMixture
 from sklearn.metrics import silhouette_score
@@ -9,26 +13,19 @@ import time
 class CompareAccuracy:
     def __init__(self):
         print("Compare Accuracy")
-        self.num_Clutered = [10, 15, 20, 25, 30]
-        self.n_Iterations = [200, 400, 600, 800, 1000]
-        self.random_State = self.n_Iterations.copy()
+        self.n_Iterations = 100
+        self.random_State = 10
 
-    def show_Accuracy(self, data):
-        # Timer
-        self.compare_Accuracy(
-            data, self.num_Clutered, self.n_Iterations, self.random_State
-        )
-
-    def compare_Accuracy(self, data, cluster, num_Iterations, state):
+    def show_Accuracy(self, main_UI, data, label, centroid):
         timer_Kmean = []
         time_MiniKmean = []
 
         def show_ImgCompare(name_Compare):
-            position = [1, 2]
-            # Show Image Compare Algorithms
-            plt.figure(figsize=(19, 12))
             if name_Compare == "K_Means":
-                self.cal_Kmean(data, cluster, num_Iterations, state)
+                self.cal_Kmean(data, centroid, label)
+                main_UI.show_UI = ui_Test()
+                main_UI.show_UI.show()
+                # hiển thị giao diện web view ở đây
             #     self.cal_MiniBatchKmean(
             #         data, cluster, num_Iterations, state, position[1]
             #     )
@@ -44,39 +41,25 @@ class CompareAccuracy:
             #     self.cal_GausianMixture(
             #         data, cluster, num_Iterations, state, position[1]
             #     )
-            plt.tight_layout()
-            plt.show()
 
         show_ImgCompare("K_Means")
         return timer_Kmean, time_MiniKmean
 
-    def cal_Kmean(self, data, cluster, num_Iterations, state):
+    def cal_Kmean(self, data, cluster, label):
         for i, items in enumerate(cluster):
-            start_time = time.time()
-            kmeans = KMeans(
-                n_clusters=cluster[i],
-                max_iter=num_Iterations[i],
-                random_state=state[i],
-            )
-            kmeans.fit(data)
-            kmeans_time = time.time() - start_time
-            silhouette_ScoreKmean = silhouette_score(
-                data, kmeans.labels_
-            )  # Silhouette Score
-            # Paint Chart
-            plt.subplot(len(self.num_Clutered), 2, i * 2 + 1)
-            plt.scatter(data[:, 0], data[:, 1], c=kmeans.labels_, cmap="viridis")
+            plt.figure(figsize=(10, 10))
+            # plt.subplot(len(cluster), 2, i + 1)
+            plt.scatter(data[:, 0], data[:, 1], c=label[i], cmap="viridis")
             plt.scatter(
-                kmeans.cluster_centers_[:, 0],
-                kmeans.cluster_centers_[:, 1],
+                cluster[i][:, 0],
+                cluster[i][:, 1],
                 marker="x",
                 s=200,
                 linewidths=3,
                 color="r",
             )
-            plt.title(
-                f"K-means: Clusters: {cluster[i]}, Iterations: {num_Iterations[i]},Time: {kmeans_time:.2f} seconds\nSilhouette Score:{silhouette_ScoreKmean:.2f},Inertia:{kmeans.inertia_:.2f}"
-            )
+            plt.title(f"K-means: Iterations: {i+1},\n")
+            plt.savefig(f"Assets/Img_Compare/K_Means_{i+1}", bbox_inches="tight")
 
     def cal_MiniBatchKmean(self, data, cluster, num_Iterations, state, position):
         for i, items in enumerate(cluster):
@@ -155,9 +138,6 @@ class CompareAccuracy:
             plt.xlabel("Time: {:.2f} seconds".format(time[i]))
         plt.tight_layout()
         plt.show()
-
-    def char_MiniBatchKmean(self):
-        print()
 
     def char_GausianMixture():
         return False

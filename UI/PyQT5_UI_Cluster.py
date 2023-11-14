@@ -64,6 +64,8 @@ class ui_Cluster(QWidget):
         self.data_Matrix = []
         self.data_Start_Points = []
         self.data_Weight = []
+        self.labels = []
+        self.centroid = []
         self.ui_()
 
     def ui_(self):
@@ -320,15 +322,15 @@ class ui_Cluster(QWidget):
                 total_Weight.append(value)
             else:
                 pass
-        if (len(total_Weight) / len(self.data_Weight)) * 100 >= 40:
+        if (len(total_Weight) / len(self.data_Weight)) * 100 >= 60:
             print("đủ điều kiện")
             pass
         else:
-            while (len(total_Weight) / len(self.data_Weight)) * 100 < 40:
+            while (len(total_Weight) / len(self.data_Weight)) * 100 < 60:
                 temp += 1
                 self.show_Data_Cluster()
                 print("chưa đủ điều kiện")
-                if temp == 100:
+                if temp == 20:
                     break
         return total_Weight
 
@@ -470,6 +472,7 @@ class ui_Cluster(QWidget):
             tol=1e-4,
         )
         kmeans.fit(self.array_Matrix, sample_weight=weight)
+        iter = kmeans.n_iter_
         # text = self.cb_Mode.currentText()
         # if text == "Volume":
         #     kmeans.fit(self.array_Matrix, sample_weight=volume)
@@ -477,6 +480,9 @@ class ui_Cluster(QWidget):
         #     kmeans.fit(self.array_Matrix, sample_weight=weight)
         labels = kmeans.labels_
         centers = kmeans.cluster_centers_
+        self.labels.extend([labels])
+        self.centroid.extend([centers])
+        print("iter", iter)
         return labels, centers
 
     def set_ValueClusterData(self):
@@ -626,7 +632,7 @@ class ui_Cluster(QWidget):
                 for item in self.data_array
             ]
         )
-        CompareAccuracy().show_Accuracy(data)
+        CompareAccuracy().show_Accuracy(self,data, self.labels, self.centroid)
 
     def update_Status_Mode(self, button, is_active):
         color = "#4CAF50" if is_active else "white"

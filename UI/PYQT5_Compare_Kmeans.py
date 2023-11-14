@@ -1,20 +1,26 @@
+from PyQt5.QtCore import QBuffer, QIODevice
+from PyQt5.QtGui import QImage
+from PyQt5.QtWebEngineWidgets import QWebEngineView
+from PyQt5.QtWidgets import (
+    QWidget,
+    QVBoxLayout,
+)
 import os
 import re
-import sys
-from PyQt5.QtCore import Qt, QByteArray, QBuffer, QIODevice
-from PyQt5.QtGui import QImage
-from PyQt5.QtWidgets import QApplication, QMainWindow
-from PyQt5.QtWebEngineWidgets import QWebEngineView
 
 
-class ImageBrowser(QMainWindow):
+class ui_Test(QWidget):
     def __init__(self):
-        super(ImageBrowser, self).__init__()
-
+        super().__init__()
+        self.layout_ = QVBoxLayout()
         self.browser = QWebEngineView()
-        self.setCentralWidget(self.browser)
-        self.setWindowTitle("Image Browser")
+        self.ui_()
+
+    def ui_(self):
+        self.setWindowTitle("Kmeans Cluster Iteration")
         self.showMaximized()
+        self.layout_.addWidget(self.browser)
+        self.setLayout(self.layout_)
         folder_path = "Assets/Img_Compare"
         self.load_images(folder_path)
 
@@ -62,10 +68,3 @@ class ImageBrowser(QMainWindow):
         buffer.open(QIODevice.WriteOnly)
         image.save(buffer, "PNG")
         return buffer.data().toBase64().data().decode("utf-8")
-
-
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    window = ImageBrowser()
-    window.show()
-    sys.exit(app.exec_())

@@ -689,7 +689,7 @@ class get_Data_DB:
                 from  MA_Equipment me,TE_SimpleOrder so, TE_SimpleTrip st, MA_Companys mc
                 where so.TripNo=st.TripNo
                 order by so.OrderId desc
-                OFFSET 6 ROWS
+                OFFSET 11 ROWS
 				FETCH NEXT 100 ROWS ONLY;
                 """
         )
