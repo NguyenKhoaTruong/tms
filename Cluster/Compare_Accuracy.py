@@ -22,7 +22,7 @@ class CompareAccuracy:
 
         def show_ImgCompare(name_Compare):
             if name_Compare == "K_Means":
-                self.cal_Kmean(data, centroid, label)
+                self.cal_Kmean(data, label,centroid)
                 main_UI.show_UI = ui_Test()
                 main_UI.show_UI.show()
                 # hiển thị giao diện web view ở đây
@@ -45,7 +45,7 @@ class CompareAccuracy:
         show_ImgCompare("K_Means")
         return timer_Kmean, time_MiniKmean
 
-    def cal_Kmean(self, data, cluster, label):
+    def cal_Kmean(self, data, label,cluster):
         for i, items in enumerate(cluster):
             plt.figure(figsize=(10, 10))
             # plt.subplot(len(cluster), 2, i + 1)
@@ -59,7 +59,7 @@ class CompareAccuracy:
                 color="r",
             )
             plt.title(f"K-means: Iterations: {i+1},\n")
-            plt.savefig(f"Assets/Img_Compare/K_Means_{i+1}", bbox_inches="tight")
+            plt.savefig(f"Assets\Img_Compare\K_Means_{i+1}", bbox_inches="tight")
 
     def cal_MiniBatchKmean(self, data, cluster, num_Iterations, state, position):
         for i, items in enumerate(cluster):

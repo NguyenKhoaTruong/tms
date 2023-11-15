@@ -1,3 +1,6 @@
+import sys
+
+sys.path.append("E:\PythonGUI-ManageEmployee\Pyqt5")
 from PyQt5.QtCore import QBuffer, QIODevice
 from PyQt5.QtGui import QImage
 from PyQt5.QtWebEngineWidgets import QWebEngineView
@@ -21,7 +24,7 @@ class ui_Test(QWidget):
         self.showMaximized()
         self.layout_.addWidget(self.browser)
         self.setLayout(self.layout_)
-        folder_path = "Assets/Img_Compare"
+        folder_path = "Assets\Img_Compare"
         self.load_images(folder_path)
 
     def load_images(self, folder_path):

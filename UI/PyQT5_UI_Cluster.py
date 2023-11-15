@@ -304,8 +304,8 @@ class ui_Cluster(QWidget):
         if len(self.data_Cluster) > 10:
             self.set_UICluster()
             self.show_Data_Cluster()
-            self.show_Map_Cluster()
             self.cal_Condisiton_Weight()
+            self.show_Map_Cluster()
             # Capacity_Mode(self.layout_Capacity)
         else:
             self.showMaximized()
@@ -482,7 +482,7 @@ class ui_Cluster(QWidget):
         centers = kmeans.cluster_centers_
         self.labels.extend([labels])
         self.centroid.extend([centers])
-        print("iter", iter)
+        # print("iter", iter)
         return labels, centers
 
     def set_ValueClusterData(self):
@@ -549,7 +549,7 @@ class ui_Cluster(QWidget):
         return data_Clean
 
     def show_Data_K_Mean_TSP(self, index):  # Dữ liệu phân cụm;
-        self.selected_cluster = self.data_Point[index]
+        self.selected_cluster = self.data_Point[-self.num_clusters:][index]
         self.selected_cluster = self.remove_data_duplicate(self.selected_cluster)
         self.cbOrigin.clear()
         for value in self.selected_cluster:
@@ -566,8 +566,8 @@ class ui_Cluster(QWidget):
 
     def show_Map_Cluster(self):
         Show_Map_Cluster(
-            self.data_Center,
-            self.data_Point,
+            self.data_Center[-self.num_clusters:],
+            self.data_Point[-self.num_clusters:],
             self.layout_UB,
             self.layout_InCluster,
             # self.compare_TSP,
@@ -632,7 +632,7 @@ class ui_Cluster(QWidget):
                 for item in self.data_array
             ]
         )
-        CompareAccuracy().show_Accuracy(self,data, self.labels, self.centroid)
+        CompareAccuracy().show_Accuracy(self, data, self.labels, self.centroid)
 
     def update_Status_Mode(self, button, is_active):
         color = "#4CAF50" if is_active else "white"
@@ -675,6 +675,7 @@ class ui_Cluster(QWidget):
 
     def use_TSP(self):
         data_TShipTo = self.get_ParamTime()
+        print('check vlaue data selected cluster',self.selected_cluster)
         if len(self.data_Cluster) > 10:
             use_TSP_Cluster(
                 self.selected_cluster,

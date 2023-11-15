@@ -198,8 +198,13 @@ phương pháp tính ra số cụm k cho thuật toán kmena tốt nhất
 
 
 
-    
+lệnh build file:
+pyinstaller.exe --onefile --windowed --name tms --icon=E:\PythonGUI-ManageEmployee\Pyqt5\logo.ico  main.py
    
+
+task : add function suggest
+       edit ui cluster compare
+       covent fuction thành api swagger.
     
 
 

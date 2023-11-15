@@ -11,6 +11,7 @@ from PyQt5.QtWidgets import (
     QSpacerItem,
     QSizePolicy,
     QComboBox,
+    QPushButton
 )
 from PyQt5.QtCore import QFile, QTextStream
 from PyQt5.QtCore import Qt
@@ -18,9 +19,8 @@ import UI.css_UI as css
 
 
 class InputDialog(QDialog):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-
+    def __init__(self,parent=None):
+        super().__init__()
         self.setWindowTitle("Add Cluster")
 
         layout = QVBoxLayout()
@@ -29,6 +29,8 @@ class InputDialog(QDialog):
 
         label_Cluster = QLabel("Number Cluster:")
         label_Cluster.setStyleSheet("font-size:15px")
+        
+        self.btn_Suggest=QPushButton("Suggest",self)
 
         label_Equipment_Type = QLabel("Equipment Type:")
         label_Equipment_Type.setStyleSheet("font-size:15px")
@@ -49,6 +51,7 @@ class InputDialog(QDialog):
 
         layout_Input.addWidget(label_Cluster)
         layout_Input.addWidget(self.input_Cluster)
+        layout_Input.addWidget(self.btn_Suggest)
         layout_Type.addWidget(label_Equipment_Type)
         layout_Type.addWidget(self.cb_Equipment_Type)
         layout.setSpacing(20)
@@ -69,4 +72,8 @@ class InputDialog(QDialog):
     def css_Layout(self):
         self.button_box.setFixedHeight(30)
         self.button_box.setStyleSheet("font-size:15px")
+        self.btn_Suggest.setStyleSheet("font-size:15px")
+        self.btn_Suggest.setFixedHeight(30)
+        self.btn_Suggest.setFixedWidth(100)
         css.css_Clsuter()
+

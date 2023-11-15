@@ -19,14 +19,18 @@ from PyQt5.QtWidgets import (
     QDialog,
     QGroupBox,
 )
-from DB.Migration import get_Data_DB
 from Process_Data.PyQT5_ClusterData import ClusterData
-from PyQt5 import QtCore, QtWidgets
-from tkinter import messagebox as mb
-from PyQt5.QtGui import QColor, QIcon
 from PyQt5.QtCore import Qt, QFile, QTextStream
 from UI.PyQT5_Dialog_Cluster import InputDialog
+from Process_Data.PyQT5_Data import data_Proc
+from PyQt5.QtGui import QColor, QIcon
+from DB.Migration import get_Data_DB
+from PyQt5 import QtCore, QtWidgets
+from tkinter import messagebox as mb
+from kneed import KneeLocator
+from sklearn.cluster import KMeans
 from datetime import date
+import numpy as np
 import pandas as pd
 import ctypes
 import datetime
@@ -290,6 +294,7 @@ class AppDemo(QWidget):
     def __init__(self):
         super().__init__()
         self.dataContact = []
+        self.data_Suggest= 0
         today = date.today()
         mainLayout = QVBoxLayout()
         group_Menu = QGroupBox("Menu")
@@ -455,28 +460,61 @@ class AppDemo(QWidget):
                     "Other Ref No1",
                 ]
             )
-
+    def suggest_Cluster(self,data):
+        order=[]
+        for value in data:
+            order.append(value[2])
+        data_Select = get_Data_DB().data_Select(order)
+        data_ = data_Proc().get_Data(data_Select)
+        self.data_Suggest=self.convent_Suggest(data_)
+        return self.data_Suggest
+    def convent_Suggest(self,data):
+        sse = []
+        arr_ = np.array(
+            [
+                [
+                    float(item[5]),
+                    float(item[6]),
+                ]
+                for item in data
+            ]
+        ).tolist()
+        k_values = range(1, len(arr_) - 1)
+        for k in k_values:
+            kmeans = KMeans(n_clusters=k)
+            kmeans.fit(arr_)
+            sse.append(kmeans.inertia_)
+        kl = KneeLocator(k_values, sse, curve="convex", direction="decreasing")
+        optimal_k = int(kl.elbow)
+        return optimal_k
+    def show_Map(self,data,cluster,equipment):
+        if len(data) == 0:
+            mb.showwarning(title="Notification!!!", message="No Data")
+        elif len(data) <= 4:
+            mb.showwarning(title="Notification!!!", message="At least five data")
+        elif len(data) >= 5 and len(data) < 10:
+            ClusterData(data, self, 0, equipment)
+            self.showMinimized()
+        else:
+            ClusterData(data, self, int(cluster), equipment)
+            self.showMinimized()
     def get_Data(self):
         try:
             selected_data = self.table.get_selected_data()
             input_dialog = InputDialog(self)
+            btn_suggest=input_dialog.btn_Suggest.clicked.connect(lambda:self.suggest_Cluster(selected_data))
+            if btn_suggest:
+                print('check vlaue data self.datasugest',self.data_Suggest)
+            
             if input_dialog.exec_() == QDialog.Accepted:
                 num_Cluster = input_dialog.input_Cluster.text()
                 equipment = input_dialog.cb_Equipment_Type.currentText()[:-1]
                 type_Equipment = float(equipment) * 1000
-
-            if len(selected_data) == 0:
-                mb.showwarning(title="Notification!!!", message="No Data")
-            elif len(selected_data) <= 4:
-                mb.showwarning(title="Notification!!!", message="At least five data")
-            elif len(selected_data) >= 5 and len(selected_data) < 10:
-                ClusterData(selected_data, self, 0, type_Equipment)
-                self.showMinimized()
-            else:
-                ClusterData(selected_data, self, int(num_Cluster), type_Equipment)
-                self.showMinimized()
+                
+            self.show_Map(selected_data,type_Equipment,num_Cluster)
         except ValueError as e:
             print("Log Error", e)
+
 
 
 menu_UI = QApplication(sys.argv)

@@ -1,8 +1,34 @@
-import matplotlib.pyplot as plt
+import sys
+
+sys.path.append("E:\PythonGUI-ManageEmployee\Pyqt5")
+from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QPushButton, QLabel, QDialog,QApplication
+
+from test1 import MyDialog  # Import class từ file dialog.py
 from kneed import KneeLocator
 from sklearn.cluster import KMeans
+class MainWindow(QMainWindow):
+    def __init__(self):
+        super(MainWindow, self).__init__()
+        self.data=[]
+        self.setWindowTitle('Main Window')
 
-data1 = [
+        self.central_widget = QWidget(self)
+        self.setCentralWidget(self.central_widget)
+
+        self.layout = QVBoxLayout()
+
+        self.button = QPushButton('Mở Dialog', self)
+        self.button.clicked.connect(self.show_dialog)
+
+        self.label = QLabel('Dữ liệu từ Dialog: ', self)
+
+        self.layout.addWidget(self.button)
+        self.layout.addWidget(self.label)
+
+        self.central_widget.setLayout(self.layout)
+
+    def show_dialog(self):
+        data1 = [
     [10.79873892744089, 106.58475073864138],
     [10.764949051934444, 106.63425262680195],
     [10.806544151486372, 106.63419073199863],
@@ -65,19 +91,28 @@ data1 = [
     [10.787963341854569, 106.69955300059291],
     [10.77059663982937, 106.66947987384219],
 ]
+        dialog = MyDialog(self)
+        dialog.ok_button.clicked.connect(lambda:self.test_Suggest(data1))
+        result = dialog.exec_()
+        if result == QDialog.Accepted:
+            print('a')
 
-def fun_A():
-    k_values = range(1, len(data1) - 1)
-    sse = []
-    for k in k_values:
-        kmeans = KMeans(n_clusters=k)
-        kmeans.fit(data1)
-        sse.append(kmeans.inertia_)
-    kl = KneeLocator(k_values, sse, curve="convex", direction="decreasing")
-    optimal_k = kl.elbow
-    return int(optimal_k)
-def fun_B():
-    a=fun_A()
-    print('check valeu data a',a)
-
-fun_B()
+    def test_Suggest(self,data):
+        k_values = range(1, len(data) - 1)
+        sse = []
+        for k in k_values:
+            kmeans = KMeans(n_clusters=k)
+            kmeans.fit(data)
+            sse.append(kmeans.inertia_)
+        
+        self.data=self.test_1(k_values,sse)
+        return self.data
+    def test_1(self,data,se):        
+        kl = KneeLocator(data, se, curve="convex", direction="decreasing")
+        optimal_k = kl.elbow
+        return int(optimal_k)
+menu_UI = QApplication(sys.argv)
+menu_UI.setStyleSheet("QPushButton{font-size: 20px; width: 200px; height: 50px}")
+view_UI = MainWindow()
+view_UI.show()
+sys.exit(menu_UI.exec_())
