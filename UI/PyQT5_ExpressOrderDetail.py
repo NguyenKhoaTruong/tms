@@ -294,7 +294,6 @@ class AppDemo(QWidget):
     def __init__(self):
         super().__init__()
         self.dataContact = []
-        self.data_Suggest= 0
         today = date.today()
         mainLayout = QVBoxLayout()
         group_Menu = QGroupBox("Menu")
@@ -460,14 +459,14 @@ class AppDemo(QWidget):
                     "Other Ref No1",
                 ]
             )
-    def suggest_Cluster(self,data):
+    def suggest_Cluster(self,data,input):
         order=[]
         for value in data:
             order.append(value[2])
         data_Select = get_Data_DB().data_Select(order)
         data_ = data_Proc().get_Data(data_Select)
-        self.data_Suggest=self.convent_Suggest(data_)
-        return self.data_Suggest
+        num_Cluster=self.convent_Suggest(data_)
+        input.setText(str(num_Cluster))
     def convent_Suggest(self,data):
         sse = []
         arr_ = np.array(
@@ -487,7 +486,7 @@ class AppDemo(QWidget):
         kl = KneeLocator(k_values, sse, curve="convex", direction="decreasing")
         optimal_k = int(kl.elbow)
         return optimal_k
-    def show_Map(self,data,cluster,equipment):
+    def show_Map(self,data,equipment,cluster):
         if len(data) == 0:
             mb.showwarning(title="Notification!!!", message="No Data")
         elif len(data) <= 4:
@@ -502,10 +501,7 @@ class AppDemo(QWidget):
         try:
             selected_data = self.table.get_selected_data()
             input_dialog = InputDialog(self)
-            btn_suggest=input_dialog.btn_Suggest.clicked.connect(lambda:self.suggest_Cluster(selected_data))
-            if btn_suggest:
-                print('check vlaue data self.datasugest',self.data_Suggest)
-            
+            input_dialog.btn_Suggest.clicked.connect(lambda:self.suggest_Cluster(selected_data,input_dialog.input_Cluster))
             if input_dialog.exec_() == QDialog.Accepted:
                 num_Cluster = input_dialog.input_Cluster.text()
                 equipment = input_dialog.cb_Equipment_Type.currentText()[:-1]

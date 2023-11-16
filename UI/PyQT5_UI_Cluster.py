@@ -632,7 +632,8 @@ class ui_Cluster(QWidget):
                 for item in self.data_array
             ]
         )
-        CompareAccuracy().show_Accuracy(self, data, self.labels, self.centroid)
+        # CompareAccuracy().show_Accuracy(self, data, self.labels, self.centroid)
+        CompareAccuracy().show_TableAccuracy(self,self.data_array,self.data_Point[-self.num_clusters:],self.equipment_Type)
 
     def update_Status_Mode(self, button, is_active):
         color = "#4CAF50" if is_active else "white"

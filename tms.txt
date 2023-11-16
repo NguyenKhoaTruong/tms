@@ -208,6 +208,13 @@ task : add function suggest
     
 
 
+tính:
+weigth:
+volume:
+order:
+drops:
+weight/equipment
+
 
 
 

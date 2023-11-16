@@ -92,12 +92,14 @@ class MainWindow(QMainWindow):
     [10.77059663982937, 106.66947987384219],
 ]
         dialog = MyDialog(self)
-        dialog.ok_button.clicked.connect(lambda:self.test_Suggest(data1))
+        dialog.ok_button.clicked.connect(lambda:self.test_Suggest(data1,dialog.textbox))
+        dialog.textbox.setText('10')
         result = dialog.exec_()
         if result == QDialog.Accepted:
-            print('a')
+            print()
+        
 
-    def test_Suggest(self,data):
+    def test_Suggest(self,data,ui):
         k_values = range(1, len(data) - 1)
         sse = []
         for k in k_values:
@@ -106,7 +108,7 @@ class MainWindow(QMainWindow):
             sse.append(kmeans.inertia_)
         
         self.data=self.test_1(k_values,sse)
-        return self.data
+        ui.setText(str(self.data))
     def test_1(self,data,se):        
         kl = KneeLocator(data, se, curve="convex", direction="decreasing")
         optimal_k = kl.elbow
