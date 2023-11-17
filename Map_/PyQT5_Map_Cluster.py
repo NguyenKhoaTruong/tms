@@ -296,7 +296,6 @@ class Show_Map_Cluster:
                 </body>
             </html>
             """
-
         if len(data_Map) > 4:
             self.web_view.setHtml(data_Map)
             self.remove_layout(dataLayout)

@@ -122,7 +122,7 @@ total_weight = []
 arr_iter = []
 arr_weight_iter = []
 arr_history = []
-
+arr_labesl=[]
 
 def kmeans_with_repeats(data, weight, iter_):
     n_clusters = 10
@@ -141,7 +141,7 @@ def kmeans_with_repeats(data, weight, iter_):
     arr_iter.extend([iter_])
     arr_weight_iter.extend([kmeans.cluster_centers_.copy()])
     arr_history.extend([kmeans.cluster_centers_.copy()])
-
+    arr_labesl.extend([labels])
     return weight_
 
 
@@ -212,13 +212,13 @@ def reload_function(weight_kmean, data, data2, weight):
         else:
             pass
     if (len(data_Weight) / len(weight_kmean)) * 100 >= 70:
-        print("đủ điều kiện")
+        # print("đủ điều kiện")
         pass
     else:
         while (len(data_Weight) / len(weight_kmean)) * 100 < 70:
             temp += 1
             kmeans_with_repeats(data2, weight, temp)
-            print("chưa đủ điều kiện")
+            # print("chưa đủ điều kiện")
             if temp == 100:
                 break
     return data_Weight
@@ -229,7 +229,7 @@ data_weight_test = kmeans_with_repeats(data2, weight, temp)
 data_reload = reload_function(data_weight_test, data, data2, weight)
 # show_Result()
 # print("check value data history", arr_history, len(arr_history))
-print("check vlaue data arr_history", arr_history, len(arr_history))
+# print("check vlaue data arr_history", arr_history, len(arr_history))
 # print("check len(arr_History)", arr_history, len(arr_history))
 # new_duplicate = []
 # for items in arr_history:
@@ -241,4 +241,13 @@ print("check vlaue data arr_history", arr_history, len(arr_history))
 # # if len(new_duplicate) > 5:
 #     print("check value", value)
 # print("check len", len(new_duplicate))
-print("chắc calue in kye", arr_history[-1])
+# print("chắc calue in kye", arr_history[-1])
+# print("hahaha",arr_labesl,len(arr_labesl))
+data_=[]
+for index,value in enumerate(arr_labesl):
+    # print('hehehe',index,value)
+    for items in value:
+        for i in range(len(data1)):
+                cluster_points = data1[items == i]
+                data_.append(cluster_points)
+print(data_)

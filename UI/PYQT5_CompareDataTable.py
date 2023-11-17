@@ -16,7 +16,6 @@ class ui_DataTableCompare(QWidget):
         super().__init__()
         self.layout_ = QVBoxLayout()
         self.browser = QWebEngineView()
-        self.data_Point=[]
         self.matrix=arg[0]
         self.point=arg[1]
         self.required=arg[2]
@@ -55,7 +54,6 @@ class ui_DataTableCompare(QWidget):
                     if lat == data_[2] and lon == data_[3]:
                         data.append(data_)
             data_Kg.append(data)
-        self.data_Point = point
         return data_Kg
     def calculator_Drops(self, drops):
         data = []
@@ -86,6 +84,7 @@ class ui_DataTableCompare(QWidget):
                 weight = item[1]
                 sum_kg += volume
                 sum_m3 += weight
+            capacity+=f"""<td>{round((float(sum_kg)/self.required)*100,3)}%</td>"""
             if sum_kg > self.required:
                 total+="<td><i class=\"fa fa-times\" style=\"font-size:30px;color:red\"></i></td>"
             else:
@@ -100,8 +99,9 @@ class ui_DataTableCompare(QWidget):
         drops += "</tr>"
         weight_TB += "</tr>"
         volume_TB += "</tr>"
+        capacity+="</tr>"
         total+="</tr>"
-        list_Option += f"""{trip}{order}{drops}{weight_TB}{volume_TB}{total}"""
+        list_Option += f"""{trip}{order}{drops}{weight_TB}{volume_TB}{capacity}{total}"""
         return list_Option
     def load_UI(self,content):
         html_content = f"""
@@ -114,10 +114,12 @@ class ui_DataTableCompare(QWidget):
             </head>
             <body>
                 <div class="container">
-                    <h1>K-Means:</h1>
-                    <table id="customers">
-                        {content}
-                    </table>
+                    <div class="content">
+                        <p>Iteration : 1</p>
+                        <table id="customers">
+                            {content}
+                        </table>
+                    </div>
                 </div>
             </body>
         </html>
