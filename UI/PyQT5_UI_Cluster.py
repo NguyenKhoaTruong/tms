@@ -66,6 +66,7 @@ class ui_Cluster(QWidget):
         self.data_Weight = []
         self.labels = []
         self.centroid = []
+        self.data_Iter=[]
         self.ui_()
 
     def ui_(self):
@@ -507,12 +508,12 @@ class ui_Cluster(QWidget):
         return self.data_Center
 
     def set_ValueDataPoint(self, labels):
-        # data=[]
+        iterPoint=[]
         for i in range(self.num_clusters):
             cluster_points = self.array_Matrix[labels == i]
             self.data_Point.append(cluster_points)
-        # if len(self.data_Point)>10:
-        #     data.append([self.data_Point])
+            iterPoint.append(cluster_points)
+        self.data_Iter.append(iterPoint)
         return self.data_Point
 
     def cal_WeightTrip(self):
@@ -636,7 +637,8 @@ class ui_Cluster(QWidget):
             ]
         )
         # CompareAccuracy().show_Accuracy(self, data, self.labels, self.centroid)
-        CompareAccuracy().show_TableAccuracy(self,self.data_array,self.data_Point[-self.num_clusters:],self.equipment_Type)
+        # CompareAccuracy().show_TableAccuracy(self,self.data_array,self.data_Point[-self.num_clusters:],self.equipment_Type)
+        CompareAccuracy().show_TableAccuracy(self,self.data_array,self.data_Iter,self.equipment_Type)
 
     def update_Status_Mode(self, button, is_active):
         color = "#4CAF50" if is_active else "white"

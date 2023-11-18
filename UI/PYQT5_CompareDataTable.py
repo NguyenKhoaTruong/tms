@@ -46,14 +46,15 @@ class ui_DataTableCompare(QWidget):
             ]
         )
         for items in point:
-            data = []
-            for value in items:
-                lat = value[0]
-                lon = value[1]
-                for data_ in arr_:
-                    if lat == data_[2] and lon == data_[3]:
-                        data.append(data_)
-            data_Kg.append(data)
+            for item in items:
+                data = []
+                for value in item:
+                    lat = value[0]
+                    lon = value[1]
+                    for data_ in arr_:
+                        if lat == data_[2] and lon == data_[3]:
+                            data.append(data_)
+                data_Kg.append(data)
         return data_Kg
     def calculator_Drops(self, drops):
         data = []
@@ -69,6 +70,8 @@ class ui_DataTableCompare(QWidget):
         return data
     def get_DataWeightVolume(self,arr_Point):
         list_Option = ""
+        _iter="<div class=\"content\">"
+        _iterNum=""
         trip = "<tr><th></th>"
         order = "<tr><th>Order</th>"
         drops = "<tr><th>Drops</th>"
@@ -76,24 +79,36 @@ class ui_DataTableCompare(QWidget):
         volume_TB = "<tr><th>Volume</th>"
         capacity ="<tr><th>Weight/Equipment</th>"
         total="<tr><th>Total</th>"
-        for index, value in enumerate(arr_Point):
-            sum_kg = 0
-            sum_m3 = 0
-            for item in value:
-                volume = item[0]
-                weight = item[1]
+        testa=""
+        for items in arr_Point:
+            html_Trip="<div class=\"content\"><table id=\"customers\">"
+            for index, value in enumerate(items):
+                test=""
+                sum_kg = 0
+                sum_m3 = 0
+                volume = value[0]
+                weight = value[1]
                 sum_kg += volume
                 sum_m3 += weight
+                html_Trip+=f"""<tr><th></th><th> Trip {index + 1}</th></tr>
+                            <tr><th>Order</th> <td>{len(value)} </td>
+                            <tr><th>Weight</th><td>{sum_kg.quantize(Decimal("1.000"), rounding=ROUND_DOWN)}</td>
+                """
+            trip += f"""<th> Trip {index + 1}</th>"""
+            testa+=f"{html_Trip}{trip}</table></div>"
             capacity+=f"""<td>{round((float(sum_kg)/self.required)*100,3)}%</td>"""
             if sum_kg > self.required:
                 total+="<td><i class=\"fa fa-times\" style=\"font-size:30px;color:red\"></i></td>"
             else:
                 total+="<td><i class=\"fa fa-check\" style=\"font-size:30px;color:green\"></i></td>"
-            trip += f"""<th> Trip {index + 1}</th>"""
+            _iterNum +=f"""<p>Iteration : {index +1 }</p>"""
+            # trip += f"""<th> Trip {index + 1}</th>"""
             order += f"""<td>{len(value)} </td>"""
-            drops += f"""<td>{len(self.calculator_Drops(value))}</td>"""
+            # drops += f"""<td>{len(self.calculator_Drops(value))}</td>"""
+            drops += f"""<td>{len(value)}</td>"""
             weight_TB += f"""<td>{sum_kg.quantize(Decimal("1.000"), rounding=ROUND_DOWN)}</td>"""
             volume_TB += f"""<td>{sum_m3.quantize(Decimal("1.000"), rounding=ROUND_DOWN)}</td>"""
+            _iter+=capacity
         trip += "</tr>"
         order += "</tr>"
         drops += "</tr>"
@@ -101,8 +116,10 @@ class ui_DataTableCompare(QWidget):
         volume_TB += "</tr>"
         capacity+="</tr>"
         total+="</tr>"
-        list_Option += f"""{trip}{order}{drops}{weight_TB}{volume_TB}{capacity}{total}"""
-        return list_Option
+        _iter+="</div>"
+        # list_Option += f"""{_iter}{_iterNum}{trip}{order}{drops}{weight_TB}{volume_TB}{capacity}{total}</table></div>"""
+        list_Option += f"""{_iter}"""
+        return testa
     def load_UI(self,content):
         html_content = f"""
         <html>
@@ -114,16 +131,12 @@ class ui_DataTableCompare(QWidget):
             </head>
             <body>
                 <div class="container">
-                    <div class="content">
-                        <p>Iteration : 1</p>
-                        <table id="customers">
-                            {content}
-                        </table>
-                    </div>
+                    {content}
                 </div>
             </body>
         </html>
         """
+        print(html_content)
         self.browser.setHtml(html_content)
         self.show()
 
