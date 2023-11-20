@@ -12,18 +12,10 @@
 
 # for i in range(num):
 #     fun_A()
-# print('check value main',data,len(data))
-
-data=[
-    [[1,2,3,4,5,6],[6,5,4,3,2,1],[11,22,33,44,55,66],[66,55,44,33,22,11]], [[1.2,2,3,4,5,6],[6.2,5,4,3,2,1],[11.2,22,33,44,55,66],[66.2,55,44,33,22,11]]
-]
-text=""
-for item in data:
-    tesx="<main>"
-    for i,value in enumerate:
-        num1=value[0]
-        num2=value[1]
-        tesx+=f"<div>{num1}</div>"
-    text+=f"{tesx}</main>"
-print(text)
-# print(text)
+# print('check value main',data,len(data)
+from decimal import Decimal
+a=Decimal(1.0000)
+print(a,type(a))
+b=0
+b+=a
+print(b)

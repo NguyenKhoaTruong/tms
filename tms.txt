@@ -202,19 +202,15 @@ lệnh build file:
 pyinstaller.exe --onefile --windowed --name tms --icon=E:\PythonGUI-ManageEmployee\Pyqt5\logo.ico  main.py
    
 
-task : add function suggest
-       edit ui cluster compare
-       covent fuction thành api swagger.
+task : covent fuction thành api swagger.
     
+20/11:
 
+sửa lại tông tin khi tạo table: 21 lần tương đương 21 bảng
+tạo project test api.
 
-tính:
-weigth:
-volume:
-order:
-drops:
-weight/equipment
-
-
+doc- api:
+https://blog.logrocket.com/django-rest-framework-create-api/
+https://blog.akashrchandran.in/how-to-create-rest-api-using-django-rest-framework
 
 
