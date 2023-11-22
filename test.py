@@ -276,8 +276,15 @@ for items in a:
             q_.append(data__)
         b_.append(q_)
     data_kg.append(b_)
-# print('check data_kg',data_kg,len(data_kg))
+_iter=""
+
 for value in data_kg:
-    print('check value i',value[1],len(value[1]))
-    for item in value[1]:
+    trip_=""
+    # print('check value',value,len(value))
+    # _iter+=f"Iteration:{i + 1 }"
+    # trip_+=f"Trip {i}"
+    for i,item in enumerate(value):
+        trip_+=f"Trip {i+1}"
         print('check vlaue data lenasdasd',item,len(item))
+print(_iter)
+print(trip_)
