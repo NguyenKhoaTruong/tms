@@ -463,6 +463,7 @@ class ui_Cluster(QWidget):
                 for item in self.data_array
             ]
         )
+        print('check valeu data self.array matrix',self.data_array)
         weight = np.array([float(item[2]) for item in self.data_array]).tolist()
         volume = np.array([float(item[3]) for item in self.data_array]).tolist()
         kmeans = KMeans(
