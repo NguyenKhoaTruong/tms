@@ -62,7 +62,7 @@ class ui_DataTableCompare(QWidget):
         return data
     def get_DataWeightVolume(self,arr_Point):
         _content=""
-        for i,items in enumerate(arr_Point):
+        for items in arr_Point:
             html_Trip="<div class=\"content\"><table id=\"customers\"><tr><th></th>"
             html_Capacity="""<tr><th>Weight/Equipment</th>"""
             html_Weight="""<tr><th>Weight</th>"""
@@ -71,69 +71,30 @@ class ui_DataTableCompare(QWidget):
             html_Drops="""<tr><th>Drops</th>"""
             html_Total="""<tr><th>Total</th>"""
             _iterNum=""
-            sum_kg=0
-            sum_m3=0
-            for i1,item in enumerate(items):
-                
-                
-                print('check vlaue data item',item)
+            print('check valeu data items',items)
+            for i,item in enumerate(items):
+                print('check value data item',item)
+                summ3=0
+                sumkg=0
+                html_Trip+=f"<td>Trip {i +1} </td>"
+                html_Orders+=f"<td>{len(item[0])}</td>"
+                html_Drops+=f"<td>{len(item[0])}</td>"
                 for value in item:
-                    orders=len(item)
-                    print('check vlaue data orders',orders)
-                    print('check value data loop item',value)
-                    for i_,_html in enumerate(value):
-                        print('check in dex _html',_html)
-                        volume = _html[0]
-                        weight = _html[1]
-                        sum_kg += volume
-                        sum_m3 += weight
-                        if sum_kg > self.required:
-                            html_Total += "<td><i class=\"fa fa-times\" style=\"font-size:30px;color:red\"></i></td>"
-                        else:
-                            html_Total += "<td><i class=\"fa fa-check\" style=\"font-size:30px;color:green\"></i></td>"
-                        html_Trip += f"""<th> Trip {i_ + 1}</th>"""
-                        html_Orders += f"""<td>{orders}</td>"""
-                        html_Drops += f"""<td>{orders}</td>"""
-                        html_Weight += f"""<td>{float(sum_kg)}</td>"""
-                        html_Volume += f"""<td>{float(sum_m3)}</td>"""
-                        html_Capacity +=f"""<td>{round((float(sum_kg)/self.required)*100,3)}%</td>"""
-                    _content+=f"""{html_Trip}</tr>{html_Orders}</tr>{html_Drops}</tr>{html_Weight}</tr>
-                    {html_Volume}</tr>{html_Capacity}</tr>{html_Total}</tr></table></div>"""
-                    _iterNum +=f"""<p>Iteration : {i_ +1 }</p>"""
-        print('check content',_content)
+                    print('check vlaue data value',value)
+                    volume = value[0]
+                    weight = value[1]
+                    sumkg+=volume
+                    summ3+=weight
+                html_Volume+=f"""<td>{float(summ3)}</td>"""
+                html_Weight+=f"""<td>{float(sumkg)}</td>"""
+                html_Capacity +=f"""<td>{round((float(sumkg)/self.required)*100,3)}%</td>"""
+                if sumkg > self.required:
+                    html_Total += "<td><i class=\"fa fa-times\" style=\"font-size:30px;color:red\"></i></td>"
+                else:
+                    html_Total += "<td><i class=\"fa fa-check\" style=\"font-size:30px;color:green\"></i></td>"
+                # _iterNum +=f"""<p>Iteration : {i_ +1 }</p>"""
+            _content=f"""{html_Trip}</tr>{html_Orders}</tr>{html_Drops}</tr>{html_Weight}</tr>{html_Volume}</tr>{html_Capacity}</tr>{html_Total}</tr></table></div>"""
         return _content
-        # _content=""
-        # for i,items in enumerate(arr_Point):
-        #     html_Trip="<div class=\"content\"><table id=\"customers\"><tr><th></th>"
-        #     html_Capacity="""<tr><th>Weight/Equipment</th>"""
-        #     html_Weight="""<tr><th>Weight</th>"""
-        #     html_Volume="""<tr><th>Volume</th>"""
-        #     html_Orders="""<tr><th>Order</th>"""
-        #     html_Drops="""<tr><th>Drops</th>"""
-        #     html_Total="""<tr><th>Total</th>"""
-        #     orders=len(items)
-        #     _iterNum=""
-        #     sum_kg=0
-        #     sum_m3=0
-        #     for index, value in enumerate(items):
-        #         volume = value[0]
-        #         weight = value[1]
-        #         sum_kg += volume
-        #         sum_m3 += weight
-        #         if sum_kg > self.required:
-        #             html_Total += "<td><i class=\"fa fa-times\" style=\"font-size:30px;color:red\"></i></td>"
-        #         else:
-        #             html_Total += "<td><i class=\"fa fa-check\" style=\"font-size:30px;color:green\"></i></td>"
-        #         html_Trip += f"""<th> Trip {index + 1}</th>"""
-        #         html_Orders += f"""<td>{orders}</td>"""
-        #         html_Drops += f"""<td>{orders}</td>"""
-        #         html_Weight += f"""<td>{float(sum_kg)}</td>"""
-        #         html_Volume += f"""<td>{float(sum_m3)}</td>"""
-        #         html_Capacity +=f"""<td>{round((float(sum_kg)/self.required)*100,3)}%</td>"""
-        #     _content+=f"""{html_Trip}</tr>{html_Orders}</tr>{html_Drops}</tr>{html_Weight}</tr>
-        #     {html_Volume}</tr>{html_Capacity}</tr>{html_Total}</tr></table></div>"""
-        #     _iterNum +=f"""<p>Iteration : {index +1 }</p>"""
-        # return _content
     def load_UI(self,content):
         html_content = f"""
         <html>
@@ -150,6 +111,7 @@ class ui_DataTableCompare(QWidget):
             </body>
         </html>
         """
+        print('check value data html content',html_content)
         self.browser.setHtml(html_content)
         self.show()
 

@@ -224,8 +224,6 @@ class Show_Map_Cluster:
         dataLayout,
         data_Map,
     ):
-        print('check value data center',data_Center)
-        print('check value data all point',self.all_Points)
         html_content = f"""
         <!DOCTYPE html>
             <html>
