@@ -74,15 +74,16 @@ class ui_DataTableCompare(QWidget):
             print('check valeu data items',items)
             for i,item in enumerate(items):
                 print('check value data item',item)
-                summ3=0
-                sumkg=0
+                summ3=0.0
+                sumkg=0.0
                 html_Trip+=f"<td>Trip {i +1} </td>"
                 html_Orders+=f"<td>{len(item[0])}</td>"
                 html_Drops+=f"<td>{len(item[0])}</td>"
                 for value in item:
                     print('check vlaue data value',value)
-                    volume = value[0]
-                    weight = value[1]
+                    volume = value[0][0]
+                    weight = value[0][1]
+                    print('check vlaue data type volume',type(volume))
                     sumkg+=volume
                     summ3+=weight
                 html_Volume+=f"""<td>{float(summ3)}</td>"""
