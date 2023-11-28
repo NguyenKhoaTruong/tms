@@ -218,3 +218,24 @@ video iis:
 
 
 https://github.com/Michael-fore/Flask_IIS
+
+
+dữ liệu biến:
+<configuration>  
+  <system.webServer>
+    <handlers>
+        <add name="Python FastCGI"
+            path="*"
+            verb="*"
+            modules="FastCgiModule"
+            scriptProcessor="C:\Python38\python.exe|C:\Python38\lib\site-packages\wfastcgi.py"
+            resourceType="Unspecified"
+            requireAccess="Script" />
+    </handlers>
+  </system.webServer>
+  <appSettings>
+    <add key="WSGI_HANDLER" value="my_app.app" /> <!-- {name_of_file}.{name_of_flask_app}-->
+    <add key="PYTHONPATH" value="C:\inetpub\wwwroot\Flask_Start" />
+	<add key="WSGI_LOG" value="C:\inetpub\wwwroot\Flask_Start\app.log" />
+  </appSettings>
+</configuration>  

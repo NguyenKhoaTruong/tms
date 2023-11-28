@@ -61,6 +61,7 @@ class ui_DataTableCompare(QWidget):
                 seen_Data.add(coordinates)
         return data
     def get_DataWeightVolume(self,arr_Point):
+        print('check vlaue data arr_point',arr_Point)
         _content=""
         for items in arr_Point:
             html_Trip="<div class=\"content\"><table id=\"customers\"><tr><th></th>"
@@ -84,8 +85,8 @@ class ui_DataTableCompare(QWidget):
                     volume = value[0][0]
                     weight = value[0][1]
                     print('check vlaue data type volume',type(volume))
-                    sumkg+=volume
-                    summ3+=weight
+                    sumkg+=float(volume)
+                    summ3+=float(volume)
                 html_Volume+=f"""<td>{float(summ3)}</td>"""
                 html_Weight+=f"""<td>{float(sumkg)}</td>"""
                 html_Capacity +=f"""<td>{round((float(sumkg)/self.required)*100,3)}%</td>"""
