@@ -61,7 +61,7 @@ class ui_DataTableCompare(QWidget):
                 seen_Data.add(coordinates)
         return data
     def get_DataWeightVolume(self,arr_Point):
-        print('check vlaue data arr_point',arr_Point)
+        print('check vlaue data arr_point',arr_Point[0])
         _content=""
         for items in arr_Point:
             html_Trip="<div class=\"content\"><table id=\"customers\"><tr><th></th>"
