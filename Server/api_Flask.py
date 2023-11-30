@@ -21,21 +21,16 @@ class ClusterResource(Resource):
 class ClusterResource(Resource):
     def post(self):
         _data = request.get_json()
-        
         if _data:
-            print('check value data request status',Response.status_code)
             _cluster=Process_Data()._process(_data)
-            # lưu dữ liệu vào file:
             self.saveFile(_cluster)
             _response={
                 'data': _cluster
-                # 'status':200,
             }
         else:
             _response={
                 'errCode':"Missing Parameter",
                 'data':[]
-                # 'status':404,
             }
         return _response
     def saveFile(self,data):

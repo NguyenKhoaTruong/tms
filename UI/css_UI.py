@@ -68,7 +68,7 @@ def css_DataTable():
         grid-gap: 10px;
         position: absolute;
     }
-    .p{
+    p{
         font-weight: bold;
         font-size: 20px;
         padding-left: 20px;

@@ -684,7 +684,7 @@ class ui_Cluster(QWidget):
 
     def use_TSP(self):
         data_TShipTo = self.get_ParamTime()
-        print('check vlaue data selected cluster',self.selected_cluster)
+        # print('check vlaue data selected cluster',self.selected_cluster)
         if len(self.data_Cluster) > 10:
             use_TSP_Cluster(
                 self.selected_cluster,

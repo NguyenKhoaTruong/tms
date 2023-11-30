@@ -61,9 +61,9 @@ class ui_DataTableCompare(QWidget):
                 seen_Data.add(coordinates)
         return data
     def get_DataWeightVolume(self,arr_Point):
-        print('check vlaue data arr_point',arr_Point[0])
         _content=""
-        for items in arr_Point:
+        for index,items in enumerate(arr_Point):
+            _iterNum =f"""<p>Iteration : {index +1 }</p>"""
             html_Trip="<div class=\"content\"><table id=\"customers\"><tr><th></th>"
             html_Capacity="""<tr><th>Weight/Equipment</th>"""
             html_Weight="""<tr><th>Weight</th>"""
@@ -71,31 +71,26 @@ class ui_DataTableCompare(QWidget):
             html_Orders="""<tr><th>Order</th>"""
             html_Drops="""<tr><th>Drops</th>"""
             html_Total="""<tr><th>Total</th>"""
-            _iterNum=""
-            print('check valeu data items',items)
             for i,item in enumerate(items):
-                print('check value data item',item)
                 summ3=0.0
                 sumkg=0.0
                 html_Trip+=f"<td>Trip {i +1} </td>"
                 html_Orders+=f"<td>{len(item[0])}</td>"
                 html_Drops+=f"<td>{len(item[0])}</td>"
-                for value in item:
-                    print('check vlaue data value',value)
-                    volume = value[0][0]
-                    weight = value[0][1]
-                    print('check vlaue data type volume',type(volume))
-                    sumkg+=float(volume)
-                    summ3+=float(volume)
-                html_Volume+=f"""<td>{float(summ3)}</td>"""
-                html_Weight+=f"""<td>{float(sumkg)}</td>"""
+                for value in item[0]:
+                    volume = value[0]
+                    weight = value[1]
+                    sumkg+=volume
+                    summ3+=weight
+                html_Volume+=f"""<td>{sumkg}</td>"""
+                html_Weight+=f"""<td>{summ3}</td>"""
                 html_Capacity +=f"""<td>{round((float(sumkg)/self.required)*100,3)}%</td>"""
                 if sumkg > self.required:
                     html_Total += "<td><i class=\"fa fa-times\" style=\"font-size:30px;color:red\"></i></td>"
                 else:
                     html_Total += "<td><i class=\"fa fa-check\" style=\"font-size:30px;color:green\"></i></td>"
                 # _iterNum +=f"""<p>Iteration : {i_ +1 }</p>"""
-            _content=f"""{html_Trip}</tr>{html_Orders}</tr>{html_Drops}</tr>{html_Weight}</tr>{html_Volume}</tr>{html_Capacity}</tr>{html_Total}</tr></table></div>"""
+            _content+=f"""{_iterNum}{html_Trip}</tr>{html_Orders}</tr>{html_Drops}</tr>{html_Weight}</tr>{html_Volume}</tr>{html_Capacity}</tr>{html_Total}</tr></table></div>"""
         return _content
     def load_UI(self,content):
         html_content = f"""
