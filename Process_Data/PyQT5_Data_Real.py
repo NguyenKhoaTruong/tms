@@ -27,6 +27,7 @@ class show_Real_Data:
         return self.data_Real(waypoints)
 
     def data_Real(self, way_point):
+        print('check value data way point',way_point)
         directions_result = self.gmaps.directions(
             origin=way_point[0],
             destination=way_point[-1],
@@ -36,7 +37,7 @@ class show_Real_Data:
         )
         total_distance = 0
         total_time = 0
-
+        print('check value data directions_result',directions_result)
         for leg in directions_result[0]["legs"]:
             total_distance += leg["distance"]["value"]
             total_time += leg["duration"]["value"]

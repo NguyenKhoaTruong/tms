@@ -116,7 +116,6 @@ class Show_Map_TSP:
         </body>
         </html>
         """
-
         if ui_map.count() >= 1:
             item = ui_map.itemAt(0)
             ui_map.removeItem(item)

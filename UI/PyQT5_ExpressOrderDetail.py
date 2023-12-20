@@ -465,6 +465,7 @@ class AppDemo(QWidget):
             order.append(value[2])
         data_Select = get_Data_DB().data_Select(order)
         data_ = data_Proc().get_Data(data_Select)
+        print('check value data suggest',data_)
         num_Cluster=self.convent_Suggest(data_)
         input.setText(str(num_Cluster))
     def convent_Suggest(self,data):

@@ -31,6 +31,7 @@ class Show_Map_TSP_Cluster:
         data_Point = self.convent_Data(dataPoint)
         data_Matrix = self.convent_Data_Matrix(data_array)
         # maker_Point = self.marker_Points(data_Point)
+        print('check value data point',data_Point,len(data_Point),type(data_Point))
         eta_ETD = self.calculator_ETA_ETD(data_Point, data_Ship)
         maker_ShipTo = self.marker_ShipTo(
             data_Point, data_Matrix, eta_ETD, mode_Start, on
@@ -139,7 +140,9 @@ class Show_Map_TSP_Cluster:
         return distance, time
 
     def calculator_ETA_ETD(self, point, time_Ship):
+        print('check valeuy data time ship 0',time_Ship[0],type(time_Ship[0]))
         time = datetime.combine(datetime.today(), time_Ship[0])
+        print('check type value start time',time,type(time))
         before_Time = time_Ship[1]
         service_Time = time_Ship[2]
         after_Time = time_Ship[3]
@@ -298,6 +301,7 @@ class Show_Map_TSP_Cluster:
             </body>
             </html>
             """
+            print('check vlaue data html',html)
             self.show_UI(ui_map, html)
 
         # <body onload="initMap()">
