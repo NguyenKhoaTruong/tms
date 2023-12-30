@@ -12,7 +12,7 @@ class Kmean_:
 
     def get_DataShowMap(self, data, num_Cluster):
         kmeans = KMeans(n_clusters=num_Cluster, random_state=0)
-        threshold_distance_km = 2
+        threshold_distance_km = 10
         for i in range(len(data)):
             kmeans.fit(data)
             labels = kmeans.labels_

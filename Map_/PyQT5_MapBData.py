@@ -115,4 +115,5 @@ class Map_BData:
             </body>
             </html>
             """
+        print('check vlaue data htmkl',html)
         return html
